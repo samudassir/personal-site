@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Syed Mudassir — Security Training for Engineering Teams</title>
+  <meta name="description" content="Security gaps don't start in production — they start in the code. Hands-on security training for engineering teams.">
+  <meta name="keywords" content="security training, appsec, secure sdlc, threat modeling, container security, ai security, engineering teams">
+  <meta name="author" content="Syed Mudassir">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://appsecmindset.com">
+  <meta property="og:title" content="Syed Mudassir — Security Training for Engineering Teams">
+  <meta property="og:description" content="Security gaps don't start in production — they start in the code. Hands-on security training for engineering teams.">
+  <meta property="og:image" content="https://appsecmindset.com/og-image.jpg">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://appsecmindset.com">
+  <meta property="twitter:title" content="Syed Mudassir — Security Training for Engineering Teams">
+  <meta property="twitter:description" content="Security gaps don't start in production — they start in the code. Hands-on security training for engineering teams.">
+  <meta property="twitter:image" content="https://appsecmindset.com/og-image.jpg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Syed Mudassir",
+    "jobTitle": "Security Trainer & Consultant",
+    "description": "Security training for engineering teams specializing in threat modeling, container security, and AI/LLM security.",
+    "url": "https://appsecmindset.com",
+    "sameAs": [
+      "https://www.linkedin.com/in/mudassir-syed/",
+      "https://medium.com/@samudassir"
+    ],
+    "knowsAbout": [
+      "Application Security",
+      "Threat Modeling",
+      "Container Security",
+      "AI Security",
+      "Secure SDLC",
+      "DevSecOps"
+    ],
+    "hasOccupation": {
+      "@type": "Occupation",
+      "name": "Security Trainer",
+      "occupationLocation": {
+        "@type": "Country",
+        "name": "United States"
+      }
+    },
+    "alumniOf": {
+      "@type": "Organization",
+      "name": "Autodesk"
+    }
+  }
+  </script>
+</head>
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav__inner container">
+      <a href="#" class="nav__logo">Mudassir<span class="nav__logo-dot">.</span></a>
+      <button class="nav__toggle" id="nav-toggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <ul class="nav__links" id="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#training">Trainings</a></li>
+        <li><a href="#speaking">Speaking</a></li>
+        <li><a href="#contact" class="btn btn--nav">Schedule a Consult</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero" id="hero">
+    <div class="container hero__inner">
+      <div class="hero__content">
+        <p class="hero__label">Security Training for Engineering Teams</p>
+        <h1 class="hero__title">
+          AI is writing code faster than ever.<br>
+          Who's making sure it's secure?
+        </h1>
+        <p class="hero__subtitle">
+          I train engineering teams in the security mindset to design secure software.
+        </p>
+        <div class="hero__cta">
+          <a href="#contact" class="btn btn--primary">Schedule a Training Consult</a>
+          <a href="#training" class="btn btn--outline">See Trainings</a>
+        </div>
+      </div>
+      <div class="hero__visual">
+        <div class="hero__terminal">
+          <div class="terminal__header">
+            <span class="terminal__dot terminal__dot--red"></span>
+            <span class="terminal__dot terminal__dot--yellow"></span>
+            <span class="terminal__dot terminal__dot--green"></span>
+          </div>
+          <div class="terminal__body">
+            <div class="terminal__line">
+              <span class="terminal__prompt">$</span>
+              <span class="terminal__text" id="typewriter"></span>
+              <span class="terminal__cursor">|</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- About -->
+  <section class="about section" id="about">
+    <div class="container">
+      <div class="about__inner">
+        <div class="about__photo">
+          <div class="about__photo-placeholder">
+            <img src="headshot.png" alt="Syed Mudassir — Security Trainer and AppSec Leader" />
+          </div>
+        </div>
+        <div class="about__content">
+          <h2 class="section__label">About</h2>
+          <h3 class="section__title">From shipping software to securing it.</h3>
+          <p>
+            Over 15 years in technology, I've been the developer shipping features under deadline pressure,
+            the data engineer building pipelines with sensitive data, and the security lead responsible
+            for protecting it all. Most recently, I led security and privacy posture management at
+            <strong>Autodesk</strong> — threat modeling business-critical applications, integrating security
+            tooling across the SDLC, and building Security Champions programs that turned developers into
+            the first line of defense.
+          </p>
+          <p>
+            That path gave me something most security trainers don't have: <strong>empathy for the engineer on the other side of the security finding.</strong> I know what it's like to get a Jira ticket that says "fix the OWASP
+            findings" with no context and no time. I build trainings that meets engineers where they are —
+            with real code, real threats, and real workflows.
+          </p>
+          <div class="about__stats">
+            <div class="stat">
+              <span class="stat__number">15+</span>
+              <span class="stat__label">Years in Technology</span>
+            </div>
+            <div class="stat">
+              <span class="stat__number">100+</span>
+              <span class="stat__label">Engineers Trained</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Training -->
+  <section class="training section" id="training">
+    <div class="container">
+      <h2 class="section__label">Training</h2>
+      <h3 class="section__title">Hands-on security trainings for engineering teams.</h3>
+      <p class="section__description">
+        Engineers leave with skills they use the next sprint &mdash; not binders they forget by Monday.
+        Every workshop, delivered through my <strong>SecureSDLC Academy</strong> program, is built around
+        real vulnerabilities, real code, and real attack scenarios.
+      </p>
+
+      <div class="training__grid">
+        <!-- Course 1: Hero Course -->
+        <div class="course course--featured">
+          <div class="course__badge">Most Popular</div>
+          <div class="course__icon">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="4" y="8" width="40" height="32" rx="4" stroke="currentColor" stroke-width="2.5"/>
+              <path d="M4 16h40" stroke="currentColor" stroke-width="2.5"/>
+              <circle cx="10" cy="12" r="1.5" fill="currentColor"/>
+              <circle cx="15" cy="12" r="1.5" fill="currentColor"/>
+              <circle cx="20" cy="12" r="1.5" fill="currentColor"/>
+              <path d="M14 26l6 4-6 4V26z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M26 28h10M26 32h7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h4 class="course__title">Threat Modeling for Builders</h4>
+          <p class="course__audience">Engineers &bull; AppSec Teams</p>
+          <p class="course__description">
+            Learn to identify threats before writing code. This course teaches engineers to think
+            like attackers during design — using lightweight, developer-friendly frameworks that
+            integrate into your existing sprint workflow. No prior security experience required.
+          </p>
+          <ul class="course__details">
+            <li>Half-day or full-day workshop</li>
+            <li>Remote or on-site delivery</li>
+            <li>Hands-on exercises with your team's architecture</li>
+          </ul>
+          <span class="course__status course__status--available">Available Now</span>
+          <a href="#contact" class="btn btn--primary btn--full">Get a Custom Training Plan</a>
+        </div>
+
+        <!-- Course 2 -->
+        <div class="course">
+          <div class="course__icon">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="8" y="6" width="32" height="36" rx="3" stroke="currentColor" stroke-width="2.5"/>
+              <path d="M8 18h32" stroke="currentColor" stroke-width="2.5"/>
+              <path d="M20 6V2M28 6V2" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M16 26h16M16 30h12M16 34h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <rect x="16" y="10" width="4" height="4" rx="1" fill="currentColor"/>
+              <rect x="22" y="10" width="4" height="4" rx="1" fill="currentColor"/>
+              <rect x="28" y="10" width="4" height="4" rx="1" fill="currentColor"/>
+            </svg>
+          </div>
+          <h4 class="course__title">Container Security: From Vulnerable to Production-Ready</h4>
+          <p class="course__audience">DevSecOps &bull; AppSec Teams</p>
+          <p class="course__description">
+            A hands-on workshop that takes your container pipeline from "it works" to "it's hardened."
+            Build, scan, and fix real container vulnerabilities — from Dockerfile misconfigurations
+            to runtime escape vectors.
+          </p>
+          <ul class="course__details">
+            <li>Full-day workshop</li>
+            <li>Includes lab environments</li>
+            <li>Covers Docker, Kubernetes, and CI/CD integration</li>
+          </ul>
+          <span class="course__status course__status--available">Available Now</span>
+          <a href="#contact" class="btn btn--outline btn--full">Talk Through Your Team's Needs</a>
+        </div>
+
+        <!-- Course 3: Coming Soon -->
+        <div class="course course--upcoming">
+          <div class="course__icon">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="24" cy="24" r="18" stroke="currentColor" stroke-width="2.5"/>
+              <path d="M24 14v10l7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="38" cy="10" r="6" fill="#e74c3c" stroke="currentColor" stroke-width="1.5"/>
+              <text x="38" y="13" text-anchor="middle" fill="white" font-size="8" font-weight="bold">AI</text>
+            </svg>
+          </div>
+          <h4 class="course__title">AI &amp; LLM Security</h4>
+          <p class="course__audience">AppSec &bull; Dev Teams</p>
+          <p class="course__description">
+            Securing AI-integrated applications — from prompt injection to model supply chain risks.
+            Built for teams shipping LLM-powered features who need to understand the new threat surface.
+          </p>
+          <span class="course__status course__status--soon">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Speaking & Credibility -->
+  <section class="speaking section" id="speaking">
+    <div class="container">
+      <h2 class="section__label">Speaking &amp; Conferences</h2>
+      <h3 class="section__title">Trusted to train at security events across the country.</h3>
+
+      <div class="speaking__grid">
+        <div class="speaking__events">
+          <h4 class="speaking__heading">Where I've Delivered</h4>
+          <div class="event-list">
+            <div class="event">
+              <span class="event__name">BSides Chicago</span>
+              <span class="event__type">Workshop</span>
+            </div>
+            <div class="event">
+              <span class="event__name">BSides San Francisco</span>
+              <span class="event__type">Workshop</span>
+            </div>
+            <div class="event">
+              <span class="event__name">DeveloperWeek</span>
+              <span class="event__type">Workshop</span>
+            </div>
+            <div class="event">
+              <span class="event__name">BSides Tampa</span>
+              <span class="event__type">Workshop</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="speaking__proof">
+          <h4 class="speaking__heading">What Attendees Say</h4>
+          <div class="testimonial">
+            <blockquote class="testimonial__quote">
+              &ldquo;I really learned a lot during the threat modeling training, and I can't
+              wait to apply it to my organization.&rdquo;
+            </blockquote>
+            <cite class="testimonial__cite">
+              &mdash; BSides Tampa Attendee
+            </cite>
+          </div>
+
+          <div class="testimonial">
+            <blockquote class="testimonial__quote">
+              &ldquo;I thoroughly enjoyed your session, the labs and the stimulating conversation.&rdquo;
+            </blockquote>
+            <cite class="testimonial__cite">
+              &mdash; BSides Tampa Attendee
+            </cite>
+          </div>
+
+          <div class="testimonial">
+            <blockquote class="testimonial__quote">
+              &ldquo;A great session and a good reminder of how to threat model &mdash;
+              even after attending Shostack's workshop.&rdquo;
+            </blockquote>
+            <cite class="testimonial__cite">
+              &mdash; BSides SF Attendee
+            </cite>
+          </div>
+
+          <div class="testimonial">
+            <blockquote class="testimonial__quote">
+              &ldquo;The template was great and I began using it immediately.&rdquo;
+            </blockquote>
+            <cite class="testimonial__cite">
+              &mdash; BSides Chicago Attendee
+            </cite>
+          </div>
+
+          <div class="testimonial">
+            <blockquote class="testimonial__quote">
+              &ldquo;Wonderful for a beginner like myself to the space.&rdquo;
+            </blockquote>
+            <cite class="testimonial__cite">
+              &mdash; BSides SF Attendee
+            </cite>
+          </div>
+
+          <div class="credibility__highlights">
+            <div class="highlight">
+              <svg class="highlight__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+              <span>15+ years in technology</span>
+            </div>
+            <div class="highlight">
+              <svg class="highlight__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+              <span>AppSec leadership at Autodesk</span>
+            </div>
+            <div class="highlight">
+              <svg class="highlight__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+              <span>Developer &rarr; Security practitioner</span>
+            </div>
+            <div class="highlight">
+              <svg class="highlight__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+              <span>Open-source security research</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact section" id="contact">
+    <div class="container">
+      <h2 class="section__label">Contact</h2>
+      <h3 class="section__title">Let's talk about training your team.</h3>
+      <p class="section__description">
+        Whether you're looking for a workshop, a conference speaker, or a conversation about
+        your team's security posture — I'd like to hear from you.
+      </p>
+
+      <div class="contact__inner">
+        <div class="contact__links">
+
+          <a href="https://www.linkedin.com/in/mudassir-syed/" class="contact-link" target="_blank" rel="noopener noreferrer">
+            <svg class="contact-link__icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+            </svg>
+            <div>
+              <span class="contact-link__label">LinkedIn</span>
+              <span class="contact-link__detail">linkedin.com/in/mudassir-syed</span>
+            </div>
+          </a>
+
+          <a href="https://medium.com/@samudassir" class="contact-link" target="_blank" rel="noopener noreferrer">
+            <svg class="contact-link__icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zm7.42 0c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/>
+            </svg>
+            <div>
+              <span class="contact-link__label">Medium</span>
+              <span class="contact-link__detail">@samudassir</span>
+            </div>
+          </a>
+
+          <a href="mailto:mudassir@appsecmindset.com" class="contact-link">
+            <svg class="contact-link__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="4" width="20" height="16" rx="2"/>
+              <path d="M22 4L12 13 2 4"/>
+            </svg>
+            <div>
+              <span class="contact-link__label">Email</span>
+              <span class="contact-link__detail">mudassir@appsecmindset.com</span>
+            </div>
+          </a>
+
+          <a href="https://calendly.com/samudassir/30min" class="contact-link" target="_blank" rel="noopener noreferrer">
+            <svg class="contact-link__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2"/>
+              <path d="M3 10h18"/>
+              <path d="M16 2v4M8 2v4"/>
+              <circle cx="12" cy="16" r="1" fill="currentColor"/>
+            </svg>
+            <div>
+              <span class="contact-link__label">Book a Call</span>
+              <span class="contact-link__detail">30-minute intro call</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p class="footer__copy">&copy; 2026 Syed Mudassir. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
