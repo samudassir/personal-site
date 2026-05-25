@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 40">
+  <!-- Shield with crosshair -->
+  <path d="M16 3L5 7.5v7.5c0 7 4.6 13 11 14.5 6.4-1.5 11-7.5 11-14.5V7.5L16 3z" fill="none" stroke="#6366f1" stroke-width="2"/>
+  <circle cx="16" cy="15" r="4.5" fill="none" stroke="#6366f1" stroke-width="1.5"/>
+  <circle cx="16" cy="15" r="1.2" fill="#6366f1"/>
+  <line x1="16" y1="9.5" x2="16" y2="11.5" stroke="#6366f1" stroke-width="1.3" stroke-linecap="round"/>
+  <line x1="16" y1="18.5" x2="16" y2="20.5" stroke="#6366f1" stroke-width="1.3" stroke-linecap="round"/>
+  <line x1="10.5" y1="15" x2="12.5" y2="15" stroke="#6366f1" stroke-width="1.3" stroke-linecap="round"/>
+  <line x1="19.5" y1="15" x2="21.5" y2="15" stroke="#6366f1" stroke-width="1.3" stroke-linecap="round"/>
+  <!-- Text -->
+  <text x="36" y="24" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" fill="#e4e4ed">
+    <tspan font-weight="700">AppSec</tspan><tspan font-weight="400" fill="#9494a8"> Mindset</tspan>
+  </text>
+</svg>
