@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PHANTOMRISE × OWASP Threat Mapping</title>
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -693,7 +692,7 @@
       <span class="pl pl-P">P</span><span class="pl pl-H">H</span><span class="pl pl-A">A</span><span class="pl pl-N">N</span><span class="pl pl-T">T</span><span class="pl pl-O">O</span><span class="pl pl-M">M</span><span class="pl pl-R">R</span><span class="pl pl-I">I</span><span class="pl pl-S">S</span><span class="pl pl-E">E</span>
     </span>
   </h1>
-  <div class="subtitle">An AI-native threat framework mapping 11 threat categories to OWASP LLM Top 10 (2025) and OWASP Agentic Top 10 (2026). Designed to complement STRIDE for complete AI system threat coverage.</div>
+  <div class="subtitle">An AI-native security framework with 11 categories — threats, failure modes, and conditions STRIDE wasn't built for. Mapped to OWASP LLM Top 10 (2025) and OWASP Agentic Top 10 (2026).</div>
 </header>
 
 <div class="stats-bar">
@@ -704,10 +703,6 @@
   <div class="stat">
     <div class="stat-num">20</div>
     <div class="stat-label">OWASP Items Covered</div>
-  </div>
-  <div class="stat">
-    <div class="stat-num">3</div>
-    <div class="stat-label">Novel Categories</div>
   </div>
   <div class="stat">
     <div class="stat-num">100%</div>
@@ -926,8 +921,8 @@
             </div>
             <div class="threat-row">
               <div><div class="threat-name">Inconsistent Safety Behavior</div><div class="threat-detail">Same prompt produces unsafe output under certain sampling conditions</div></div>
-              <div class="owasp-badges"><span class="owasp-badge llm09">LLM09</span><span class="novel-tag">★ Partial</span></div>
-              <div class="threat-detail">LLM09 covers outputs, not the stochastic mechanism</div>
+              <div class="owasp-badges"><span class="novel-tag">★ No OWASP equivalent</span></div>
+              <div class="threat-detail">Not named in any existing framework — this is the point</div>
             </div>
           </div>
         </div>
@@ -1285,7 +1280,7 @@
     LLM06: {letters:['A'], label:'Excessive Agency'},
     LLM07: {letters:['M','E'], label:'System Prompt Leakage'},
     LLM08: {letters:['P'], label:'Vector & Embedding Weaknesses'},
-    LLM09: {letters:['H','N'], label:'Misinformation'},
+    LLM09: {letters:['H'], label:'Misinformation'},
     LLM10: {letters:['R'], label:'Unbounded Consumption'},
     ASI01: {letters:['M'], label:'Agent Goal Hijack'},
     ASI02: {letters:['A'], label:'Tool Misuse & Exploitation'},
