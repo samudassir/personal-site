@@ -282,15 +282,26 @@ strong {
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  margin-top: 0.5rem;
-  padding: 0.5rem 0;
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  padding-top: 0.75rem;
   min-width: 160px;
   list-style: none;
   z-index: 1000;
+  background: transparent;
+}
+
+.nav__dropdown-menu::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  top: 0.75rem;
+  z-index: -1;
 }
 
 .nav__dropdown-menu li {
@@ -303,7 +314,7 @@ strong {
 
 .nav__dropdown-menu li a {
   display: block;
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1rem;
   font-size: var(--text-sm);
   color: var(--color-text-secondary);
   white-space: nowrap;
