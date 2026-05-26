@@ -268,6 +268,47 @@ strong {
   color: var(--color-text);
 }
 
+.nav__dropdown {
+  position: relative;
+}
+
+.nav__dropdown-toggle {
+  cursor: pointer;
+}
+
+.nav__dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 0.5rem;
+  padding: 0.5rem 0;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  min-width: 160px;
+  list-style: none;
+  z-index: 1000;
+}
+
+.nav__dropdown:hover .nav__dropdown-menu {
+  display: block;
+}
+
+.nav__dropdown-menu li a {
+  display: block;
+  padding: 0.5rem 1rem;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.nav__dropdown-menu li a:hover {
+  color: var(--color-text);
+  background: var(--color-bg-card-hover);
+}
+
 .nav__toggle {
   display: none;
   flex-direction: column;
