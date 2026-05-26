@@ -655,6 +655,65 @@ strong {
 }
 
 /* ============================================
+   Resources
+   ============================================ */
+.resources__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-lg);
+  margin-top: var(--space-2xl);
+}
+
+.resource-card {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-xl);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition: var(--transition-base);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.resource-card:hover {
+  border-color: var(--color-accent-border);
+  background: var(--color-bg-card-hover);
+  transform: translateY(-2px);
+}
+
+.resource-card__icon {
+  width: 48px;
+  height: 48px;
+  color: var(--color-accent);
+  margin-bottom: var(--space-md);
+}
+
+.resource-card__title {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  margin-bottom: var(--space-sm);
+}
+
+.resource-card__description {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  flex: 1;
+}
+
+.resource-card__cta {
+  margin-top: var(--space-md);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.resource-card:hover .resource-card__cta {
+  color: var(--color-accent-hover);
+}
+
+/* ============================================
    Speaking & Credibility
    ============================================ */
 .speaking {

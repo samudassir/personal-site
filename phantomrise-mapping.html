@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PHANTOMRISE × OWASP Threat Mapping</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080a0f;
+    --surface: #0e1016;
+    --surface2: #161820;
+    --border: #1e2028;
+    --text: #e2e4ec;
+    --muted: #5a6072;
+    --muted2: #3a3f50;
+
+    /* PHANTOMRISE letter colors */
+    --P: #ff6b6b;
+    --H: #ff9f43;
+    --A: #ffd32a;
+    --N: #ff6bff;
+    --T: #00e5ff;
+    --O: #48dbfb;
+    --M: #ff4757;
+    --R: #ff6348;
+    --I: #7bed9f;
+    --S: #70a1ff;
+    --E: #eccc68;
+
+    /* Novel category highlight */
+    --novel: #ff6bff;
+    --novel-bg: rgba(255,107,255,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* Header */
+  header {
+    padding: 48px 40px 28px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(255,107,255,0.06) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 200px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(0,229,255,0.04) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .header-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--novel);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .header-tag::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 1px;
+    background: var(--novel);
+  }
+
+  h1 {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(24px, 4vw, 42px);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 6px;
+    letter-spacing: -1px;
+  }
+
+  .phantom-letters {
+    display: inline-flex;
+    gap: 0;
+  }
+
+  .pl { display: inline-block; }
+  .pl-P { color: var(--P); }
+  .pl-H { color: var(--H); }
+  .pl-A { color: var(--A); }
+  .pl-N { color: var(--N); }
+  .pl-T { color: var(--T); }
+  .pl-O { color: var(--O); }
+  .pl-M { color: var(--M); }
+  .pl-R { color: var(--R); }
+  .pl-I { color: var(--I); }
+  .pl-S { color: var(--S); }
+  .pl-E { color: var(--E); }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 13px;
+    max-width: 600px;
+    margin-top: 10px;
+  }
+
+  .novel-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--novel-bg);
+    border: 1px solid rgba(255,107,255,0.2);
+    color: var(--novel);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-top: 16px;
+  }
+
+  .novel-badge::before {
+    content: '★';
+    font-size: 9px;
+  }
+
+  /* Stats */
+  .stats-bar {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .stat {
+    padding: 16px 32px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stat-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    padding: 0 40px;
+  }
+
+  .tab-btn {
+    padding: 14px 20px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.15s;
+    margin-bottom: -1px;
+  }
+
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--novel); border-bottom-color: var(--novel); }
+
+  /* Layout */
+  .layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: calc(100vh - 240px);
+  }
+
+  /* Sidebar */
+  .sidebar {
+    border-right: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    height: calc(100vh - 240px);
+    overflow-y: auto;
+    padding: 20px 0;
+  }
+
+  .sidebar-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--muted2);
+    text-transform: uppercase;
+    padding: 0 18px 14px;
+  }
+
+  .letter-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 9px 18px;
+    background: none;
+    border: none;
+    color: var(--text);
+    cursor: pointer;
+    text-align: left;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    transition: all 0.12s;
+    border-left: 3px solid transparent;
+    position: relative;
+  }
+
+  .letter-btn:hover { background: rgba(255,255,255,0.03); }
+  .letter-btn.active { background: rgba(255,255,255,0.04); }
+
+  .letter-icon {
+    width: 30px; height: 30px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .letter-name {
+    flex: 1;
+    font-size: 12px;
+    line-height: 1.3;
+  }
+
+  .letter-name strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .novel-star {
+    font-size: 10px;
+    color: var(--novel);
+    flex-shrink: 0;
+  }
+
+  /* Main */
+  .main {
+    padding: 28px 36px;
+    overflow-y: auto;
+  }
+
+  /* Category cards */
+  .category-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .category-card:hover { border-color: var(--border); }
+
+  .category-card.novel {
+    border-color: rgba(255,107,255,0.15);
+  }
+
+  .category-card.novel:hover {
+    border-color: rgba(255,107,255,0.3);
+  }
+
+  .cat-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .cat-letter {
+    width: 40px; height: 40px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .cat-info { flex: 1; }
+
+  .cat-name {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 2px;
+  }
+
+  .cat-tagline {
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .cat-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .novel-pill {
+    background: var(--novel-bg);
+    border: 1px solid rgba(255,107,255,0.25);
+    color: var(--novel);
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    text-transform: uppercase;
+  }
+
+  .chevron {
+    color: var(--muted2);
+    font-size: 12px;
+    transition: transform 0.2s;
+  }
+
+  .category-card.expanded .chevron { transform: rotate(180deg); }
+
+  .cat-body {
+    display: none;
+    border-top: 1px solid var(--border);
+  }
+
+  .category-card.expanded .cat-body { display: block; }
+
+  .cat-description {
+    padding: 16px 20px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .cat-description em {
+    color: var(--text);
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  /* Threats grid */
+  .threats-section {
+    padding: 16px 20px;
+  }
+
+  .threats-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--muted2);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .threat-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+  }
+
+  .threat-row:last-child { border-bottom: none; }
+
+  .threat-grid-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    padding: 0 0 8px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 4px;
+  }
+
+  .grid-col-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    color: var(--muted2);
+    text-transform: uppercase;
+  }
+
+  .threat-name {
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 3px;
+    color: var(--text);
+  }
+
+  .threat-detail {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .owasp-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .owasp-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    padding: 3px 7px;
+    border-radius: 3px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  /* LLM badges */
+  .llm01 { background: rgba(255,71,87,0.15); color: #ff6b81; border: 1px solid rgba(255,71,87,0.25); }
+  .llm02 { background: rgba(255,159,67,0.15); color: #ffa94d; border: 1px solid rgba(255,159,67,0.25); }
+  .llm03 { background: rgba(255,211,42,0.15); color: #ffd43b; border: 1px solid rgba(255,211,42,0.25); }
+  .llm04 { background: rgba(123,237,159,0.15); color: #69db7c; border: 1px solid rgba(123,237,159,0.25); }
+  .llm05 { background: rgba(112,161,255,0.15); color: #74c0fc; border: 1px solid rgba(112,161,255,0.25); }
+  .llm06 { background: rgba(0,229,255,0.15); color: #22d3ee; border: 1px solid rgba(0,229,255,0.25); }
+  .llm07 { background: rgba(255,107,255,0.15); color: #f472b6; border: 1px solid rgba(255,107,255,0.25); }
+  .llm08 { background: rgba(236,204,104,0.15); color: #e9c46a; border: 1px solid rgba(236,204,104,0.25); }
+  .llm09 { background: rgba(255,99,72,0.15); color: #ff8c69; border: 1px solid rgba(255,99,72,0.25); }
+  .llm10 { background: rgba(165,216,255,0.15); color: #a5d8ff; border: 1px solid rgba(165,216,255,0.25); }
+
+  /* ASI badges */
+  .asi01 { background: rgba(255,71,87,0.12); color: #ff8787; border: 1px solid rgba(255,71,87,0.2); }
+  .asi02 { background: rgba(255,159,67,0.12); color: #ffb347; border: 1px solid rgba(255,159,67,0.2); }
+  .asi03 { background: rgba(123,237,159,0.12); color: #8ce99a; border: 1px solid rgba(123,237,159,0.2); }
+  .asi04 { background: rgba(255,211,42,0.12); color: #ffe066; border: 1px solid rgba(255,211,42,0.2); }
+  .asi05 { background: rgba(0,229,255,0.12); color: #67e8f9; border: 1px solid rgba(0,229,255,0.2); }
+  .asi06 { background: rgba(255,107,255,0.12); color: #e879f9; border: 1px solid rgba(255,107,255,0.2); }
+  .asi07 { background: rgba(112,161,255,0.12); color: #93c5fd; border: 1px solid rgba(112,161,255,0.2); }
+  .asi08 { background: rgba(236,204,104,0.12); color: #fde68a; border: 1px solid rgba(236,204,104,0.2); }
+  .asi09 { background: rgba(165,216,255,0.12); color: #bae6fd; border: 1px solid rgba(165,216,255,0.2); }
+  .asi10 { background: rgba(255,99,72,0.12); color: #fca5a5; border: 1px solid rgba(255,99,72,0.2); }
+
+  .novel-tag {
+    background: var(--novel-bg);
+    border: 1px solid rgba(255,107,255,0.2);
+    color: var(--novel);
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    padding: 3px 7px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Matrix view */
+  .matrix-view { display: none; }
+  .matrix-view.visible { display: block; }
+  .list-view.hidden { display: none; }
+
+  .matrix-wrap {
+    overflow-x: auto;
+    padding-bottom: 16px;
+  }
+
+  .matrix-table {
+    border-collapse: collapse;
+    min-width: 900px;
+    width: 100%;
+    font-size: 11px;
+  }
+
+  .matrix-table th {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--muted);
+    text-transform: uppercase;
+    padding: 10px 8px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    white-space: nowrap;
+  }
+
+  .matrix-table th:first-child {
+    text-align: left;
+    width: 180px;
+    position: sticky;
+    left: 0;
+    background: var(--surface);
+    z-index: 1;
+  }
+
+  .matrix-table td {
+    padding: 7px 6px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid rgba(255,255,255,0.03);
+  }
+
+  .matrix-table td:first-child {
+    text-align: left;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 7px 12px;
+    position: sticky;
+    left: 0;
+    background: var(--bg);
+    z-index: 1;
+    white-space: nowrap;
+  }
+
+  .matrix-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .matrix-table tr:hover td:first-child { background: var(--surface); }
+
+  .matrix-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin: 0 auto;
+  }
+
+  /* Section dividers in matrix */
+  .matrix-section-llm th,
+  .matrix-section-asi th {
+    background: var(--surface2);
+  }
+
+  .col-section {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 1px;
+    color: var(--muted2);
+    padding: 6px 8px 2px;
+    text-transform: uppercase;
+    background: var(--surface2);
+    border-bottom: none;
+  }
+
+  /* Coverage tab */
+  .coverage-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+  }
+
+  .coverage-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 14px 16px;
+  }
+
+  .coverage-owasp {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .coverage-maps-to {
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .coverage-maps-to span {
+    font-size: 10px;
+    color: var(--muted2);
+    margin-right: 2px;
+  }
+
+  /* Legend */
+  .legend {
+    padding: 28px 40px;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .legend-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .legend-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .legend-section-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    color: var(--muted2);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .legend-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .legend-item .owasp-badge { flex-shrink: 0; margin-top: 1px; }
+
+  .footer-brand {
+    text-align: center;
+    padding: 20px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted2);
+    letter-spacing: 1px;
+    border-top: 1px solid var(--border);
+  }
+
+  .footer-brand a {
+    color: var(--novel);
+    text-decoration: none;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-tag">AI Security Framework</div>
+  <h1>
+    <span class="phantom-letters">
+      <span class="pl pl-P">P</span><span class="pl pl-H">H</span><span class="pl pl-A">A</span><span class="pl pl-N">N</span><span class="pl pl-T">T</span><span class="pl pl-O">O</span><span class="pl pl-M">M</span><span class="pl pl-R">R</span><span class="pl pl-I">I</span><span class="pl pl-S">S</span><span class="pl pl-E">E</span>
+    </span>
+  </h1>
+  <div class="subtitle">An AI-native threat framework mapping 11 threat categories to OWASP LLM Top 10 (2025) and OWASP Agentic Top 10 (2026). Designed to complement STRIDE for complete AI system threat coverage.</div>
+  <div class="novel-badge">3 Novel Categories Not in Any Existing Framework — N, O, S</div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-num">11</div>
+    <div class="stat-label">Threat Categories</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">20</div>
+    <div class="stat-label">OWASP Items Covered</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">3</div>
+    <div class="stat-label">Novel Categories</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">100%</div>
+    <div class="stat-label">OWASP Coverage</div>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="setTab('list', this)">Category View</button>
+  <button class="tab-btn" onclick="setTab('matrix', this)">Coverage Matrix</button>
+  <button class="tab-btn" onclick="setTab('coverage', this)">OWASP Coverage</button>
+</div>
+
+<div class="layout">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-title">PHANTOMRISE Letters</div>
+    <button class="letter-btn active" onclick="scrollTo('P', this)" style="border-left-color: var(--P)">
+      <div class="letter-icon" style="background:rgba(255,107,107,0.12); color:var(--P)">P</div>
+      <div class="letter-name"><strong>Poisoning</strong>Data, model, memory</div>
+    </button>
+    <button class="letter-btn" onclick="scrollTo('H', this)" style="">
+      <div class="letter-icon" style="background:rgba(255,159,67,0.12); color:var(--H)">H</div>
+      <div class="letter-name"><strong>Hallucination</strong>False & cascading outputs</div>
+    </button>
+    <button class="letter-btn" onclick="scrollTo('A', this)">
+      <div class="letter-icon" style="background:rgba(255,211,42,0.12); color:var(--A)">A</div>
+      <div class="letter-name"><strong>Autonomy Failures</strong>Scope, HITL, planning</div>
+    </button>
+    <button class="letter-btn" onclick="scrollTo('N', this)">
+      <div class="letter-icon" style="background:rgba(255,107,255,0.12); color:var(--N)">N</div>
+      <div class="letter-name"><strong>Non-determinism</strong>Stochastic behavior</div>
+      <div class="novel-star">★</div>
+    </button>
+    <button class="letter-btn" onclick="scrollTo('T', this)">
+      <div class="letter-icon" style="background:rgba(0,229,255,0.12); color:var(--T)">T</div>
+      <div class="letter-name"><strong>Trust & Supply Chain</strong>Models, MCP, plugins</div>
+    </button>
+    <button class="letter-btn" onclick="scrollTo('O', this)">
+      <div class="letter-icon" style="background:rgba(72,219,251,0.12); color:var(--O)">O</div>
+      <div class="letter-name"><strong>Observability Gaps</strong>Blind spots, tracing</div>
+      <div class="novel-star">★</div>
+    </button>
+    <button class="letter-btn" onclick="scrollTo('M', this)">
+      <div class="letter-icon" style="background:rgba(255,71,87,0.12); color:var(--M)">M</div>
+      <div class="letter-name"><strong>Manipulation</strong>Injection, goal hijack</div>
+    </button>
+    <button class="letter-btn" onclick="scrollTo('R', this)">
+      <div class="letter-icon" style="background:rgba(255,99,72,0.12); color:var(--R)">R</div>
+      <div class="letter-name"><strong>Resource Exhaustion</strong>DoS, Denial of Wallet</div>
+    </button>
+    <button class="letter-btn" onclick="scrollTo('I', this)">
+      <div class="letter-icon" style="background:rgba(123,237,159,0.12); color:var(--I)">I</div>
+      <div class="letter-name"><strong>Identity & Privilege</strong>NHI, delegation chains</div>
+    </button>
+    <button class="letter-btn" onclick="scrollTo('S', this)">
+      <div class="letter-icon" style="background:rgba(112,161,255,0.12); color:var(--S)">S</div>
+      <div class="letter-name"><strong>Sharing & Isolation</strong>Memory bleed, cross-tenant</div>
+      <div class="novel-star">★</div>
+    </button>
+    <button class="letter-btn" onclick="scrollTo('E', this)">
+      <div class="letter-icon" style="background:rgba(236,204,104,0.12); color:var(--E)">E</div>
+      <div class="letter-name"><strong>Exposure & Output</strong>PII, system prompt leak</div>
+    </button>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- LIST VIEW -->
+    <div class="list-view" id="listView">
+
+      <!-- P -->
+      <div class="category-card expanded" id="cat-P">
+        <div class="cat-header" onclick="toggleCat(this)">
+          <div class="cat-letter" style="background:rgba(255,107,107,0.12); color:var(--P)">P</div>
+          <div class="cat-info">
+            <div class="cat-name" style="color:var(--P)">Poisoning</div>
+            <div class="cat-tagline">Training data, RAG stores, embeddings, agent memory, eval datasets</div>
+          </div>
+          <div class="cat-meta"><span class="chevron">▾</span></div>
+        </div>
+        <div class="cat-body">
+          <div class="cat-description">
+            Every data surface an AI system relies on is an attack surface. An attacker who poisons a RAG store manipulates every answer the system retrieves. Poisoning the <em>evaluation dataset</em> — corrupting the data used to test model safety — can hide malicious behaviors during testing, a subtle attack vector neither OWASP list names explicitly.
+          </div>
+          <div class="threats-section">
+            <div class="threats-title">Threat Mappings</div>
+            <div class="threat-grid-header">
+              <div class="grid-col-title">Threat</div>
+              <div class="grid-col-title">OWASP Mapping</div>
+              <div class="grid-col-title">Notes</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">Training Data Poisoning</div><div class="threat-detail">Corrupting model weights via backdoored training data</div></div>
+              <div class="owasp-badges"><span class="owasp-badge llm04">LLM04</span><span class="owasp-badge asi05">ASI05</span></div>
+              <div class="threat-detail">Core OWASP coverage; backdoor insertion at training time</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">RAG / Memory Poisoning</div><div class="threat-detail">Injecting malicious content into retrieval stores or agent memory</div></div>
+              <div class="owasp-badges"><span class="owasp-badge llm08">LLM08</span><span class="owasp-badge asi05">ASI05</span></div>
+              <div class="threat-detail">Runtime memory manipulation persists across agent sessions</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">Eval Set Poisoning</div><div class="threat-detail">Corrupting evaluation data to hide malicious model behavior during testing</div></div>
+              <div class="owasp-badges"><span class="owasp-badge llm04">LLM04</span></div>
+              <div class="threat-detail">Not explicitly named in any OWASP list — PHANTOMRISE original</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- H -->
+      <div class="category-card" id="cat-H">
+        <div class="cat-header" onclick="toggleCat(this)">
+          <div class="cat-letter" style="background:rgba(255,159,67,0.12); color:var(--H)">H</div>
+          <div class="cat-info">
+            <div class="cat-name" style="color:var(--H)">Hallucination</div>
+            <div class="cat-tagline">False outputs, overconfidence, cascading errors across agent chains</div>
+          </div>
+          <div class="cat-meta"><span class="chevron">▾</span></div>
+        </div>
+        <div class="cat-body">
+          <div class="cat-description">
+            AI systems produce false outputs with high confidence. In multi-agent systems, <em>cascading hallucination</em> occurs when one agent's false output becomes factual input for the next — amplifying the error across the pipeline in ways a single-model system cannot.
+          </div>
+          <div class="threats-section">
+            <div class="threats-title">Threat Mappings</div>
+            <div class="threat-grid-header">
+              <div class="grid-col-title">Threat</div>
+              <div class="grid-col-title">OWASP Mapping</div>
+              <div class="grid-col-title">Notes</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">Misinformation / Hallucination</div><div class="threat-detail">Confidently false outputs causing harmful downstream decisions</div></div>
+              <div class="owasp-badges"><span class="owasp-badge llm09">LLM09</span></div>
+              <div class="threat-detail">Primary OWASP coverage</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">Cascading Hallucination</div><div class="threat-detail">False output from one agent propagates as fact through downstream agents</div></div>
+              <div class="owasp-badges"><span class="owasp-badge asi06">ASI06</span></div>
+              <div class="threat-detail">Multi-agent amplification of errors; extends ASI06</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- A -->
+      <div class="category-card" id="cat-A">
+        <div class="cat-header" onclick="toggleCat(this)">
+          <div class="cat-letter" style="background:rgba(255,211,42,0.12); color:var(--A)">A</div>
+          <div class="cat-info">
+            <div class="cat-name" style="color:var(--A)">Autonomy Failures</div>
+            <div class="cat-tagline">Excessive scope, missing HITL checkpoints, unconstrained planning</div>
+          </div>
+          <div class="cat-meta"><span class="chevron">▾</span></div>
+        </div>
+        <div class="cat-body">
+          <div class="cat-description">
+            The threat here isn't an adversary doing something the system wasn't designed for — it's the system doing <em>exactly what it was designed for</em>, unsupervised, beyond the boundaries anyone intended. STRIDE has no category for this failure mode.
+          </div>
+          <div class="threats-section">
+            <div class="threats-title">Threat Mappings</div>
+            <div class="threat-grid-header">
+              <div class="grid-col-title">Threat</div>
+              <div class="grid-col-title">OWASP Mapping</div>
+              <div class="grid-col-title">Notes</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">Excessive Agency</div><div class="threat-detail">Agent acts beyond intended scope without human oversight</div></div>
+              <div class="owasp-badges"><span class="owasp-badge llm06">LLM06</span><span class="owasp-badge asi08">ASI08</span></div>
+              <div class="threat-detail">Core OWASP coverage for both lists</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">Tool Misuse</div><div class="threat-detail">Agent invokes tools outside its intended use or chains tools destructively</div></div>
+              <div class="owasp-badges"><span class="owasp-badge asi02">ASI02</span></div>
+              <div class="threat-detail">Agentic-specific; destructive tool chaining</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">Unconstrained Planning</div><div class="threat-detail">Agent pursues goals beyond its mandate without HITL gates</div></div>
+              <div class="owasp-badges"><span class="owasp-badge asi08">ASI08</span><span class="owasp-badge asi09">ASI09</span></div>
+              <div class="threat-detail">Missing kill-switch or scope boundary enforcement</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- N — NOVEL -->
+      <div class="category-card novel" id="cat-N">
+        <div class="cat-header" onclick="toggleCat(this)">
+          <div class="cat-letter" style="background:rgba(255,107,255,0.12); color:var(--N)">N</div>
+          <div class="cat-info">
+            <div class="cat-name" style="color:var(--N)">Non-determinism</div>
+            <div class="cat-tagline">Stochastic behavior as a security property — not a threat, but the condition that changes everything</div>
+          </div>
+          <div class="cat-meta">
+            <span class="novel-pill">★ Novel</span>
+            <span class="chevron">▾</span>
+          </div>
+        </div>
+        <div class="cat-body">
+          <div class="cat-description">
+            Non-determinism isn't an attack vector — it's the property that makes AI systems uniquely difficult to secure. Stochastic outputs invalidate deterministic threat models, break traditional testing, and make incident response unreliable. <em>Statistical jailbreaking</em> — repeating the same prompt until safety boundaries fail through sampling variance — is a documented exploit of this property. <strong>No existing framework names this concept.</strong>
+          </div>
+          <div class="threats-section">
+            <div class="threats-title">Threat Mappings</div>
+            <div class="threat-grid-header">
+              <div class="grid-col-title">Threat</div>
+              <div class="grid-col-title">OWASP Mapping</div>
+              <div class="grid-col-title">Notes</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">Statistical Jailbreaking</div><div class="threat-detail">Exploiting sampling variance to bypass safety controls through repeated attempts</div></div>
+              <div class="owasp-badges"><span class="novel-tag">★ No OWASP equivalent</span></div>
+              <div class="threat-detail">Not in OWASP, STRIDE, or MITRE ATLAS</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">Inconsistent Safety Behavior</div><div class="threat-detail">Same prompt produces unsafe output under certain sampling conditions</div></div>
+              <div class="owasp-badges"><span class="owasp-badge llm09">LLM09</span><span class="novel-tag">★ Partial</span></div>
+              <div class="threat-detail">LLM09 covers outputs, not the stochastic mechanism</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T -->
+      <div class="category-card" id="cat-T">
+        <div class="cat-header" onclick="toggleCat(this)">
+          <div class="cat-letter" style="background:rgba(0,229,255,0.12); color:var(--T)">T</div>
+          <div class="cat-info">
+            <div class="cat-name" style="color:var(--T)">Trust & Supply Chain</div>
+            <div class="cat-tagline">Malicious base models, compromised MCP servers, marketplace agents, poisoned plugins</div>
+          </div>
+          <div class="cat-meta"><span class="chevron">▾</span></div>
+        </div>
+        <div class="cat-body">
+          <div class="cat-description">
+            OWASP covers supply chain in one category; MAESTRO distributes it across four layers. PHANTOMRISE consolidates it as T — a single practitioner prompt: <em>where does this system trust things it shouldn't?</em>
+          </div>
+          <div class="threats-section">
+            <div class="threats-title">Threat Mappings</div>
+            <div class="threat-grid-header">
+              <div class="grid-col-title">Threat</div>
+              <div class="grid-col-title">OWASP Mapping</div>
+              <div class="grid-col-title">Notes</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">Compromised Base Model</div><div class="threat-detail">Backdoored weights from malicious model provider or fine-tuning pipeline</div></div>
+              <div class="owasp-badges"><span class="owasp-badge llm03">LLM03</span><span class="owasp-badge asi04">ASI04</span></div>
+              <div class="threat-detail">Supply chain entry point at the foundation layer</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">Malicious MCP Server / Plugin</div><div class="threat-detail">Compromised tool server or plugin injecting malicious behavior into agent workflows</div></div>
+              <div class="owasp-badges"><span class="owasp-badge asi04">ASI04</span><span class="owasp-badge llm03">LLM03</span></div>
+              <div class="threat-detail">Marketplace agent risk: not explicitly named in ASI04</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- O — NOVEL -->
+      <div class="category-card novel" id="cat-O">
+        <div class="cat-header" onclick="toggleCat(this)">
+          <div class="cat-letter" style="background:rgba(72,219,251,0.12); color:var(--O)">O</div>
+          <div class="cat-info">
+            <div class="cat-name" style="color:var(--O)">Observability Gaps</div>
+            <div class="cat-tagline">Absent monitoring framed as a first-class security threat, not an ops problem</div>
+          </div>
+          <div class="cat-meta">
+            <span class="novel-pill">★ Novel</span>
+            <span class="chevron">▾</span>
+          </div>
+        </div>
+        <div class="cat-body">
+          <div class="cat-description">
+            Absent from the OWASP LLM Top 10 entirely — and that absence is itself the problem. A goal-hijacked agent looks like a functioning system until something goes wrong downstream. <em>You can't detect or respond to threats you can't see.</em> PHANTOMRISE treats observability not as an operational nicety but as a first-class security control.
+          </div>
+          <div class="threats-section">
+            <div class="threats-title">Threat Mappings</div>
+            <div class="threat-grid-header">
+              <div class="grid-col-title">Threat</div>
+              <div class="grid-col-title">OWASP Mapping</div>
+              <div class="grid-col-title">Notes</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">Agent Trace Blind Spots</div><div class="threat-detail">No causal tracing for multi-step autonomous decisions</div></div>
+              <div class="owasp-badges"><span class="owasp-badge asi09">ASI09</span></div>
+              <div class="threat-detail">ASI09 partially covers; LLM Top 10 has no equivalent</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">Silent Failures in Pipelines</div><div class="threat-detail">Agent takes harmful action with no anomaly signal — looks like normal operation</div></div>
+              <div class="owasp-badges"><span class="novel-tag">★ Novel framing</span></div>
+              <div class="threat-detail">Treating absent monitoring as a security threat — not in any framework</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- M -->
+      <div class="category-card" id="cat-M">
+        <div class="cat-header" onclick="toggleCat(this)">
+          <div class="cat-letter" style="background:rgba(255,71,87,0.12); color:var(--M)">M</div>
+          <div class="cat-info">
+            <div class="cat-name" style="color:var(--M)">Manipulation</div>
+            <div class="cat-tagline">Prompt injection, goal hijacking, intent drift, multimodal injection</div>
+          </div>
+          <div class="cat-meta"><span class="chevron">▾</span></div>
+        </div>
+        <div class="cat-body">
+          <div class="cat-description">
+            The most well-documented AI attack surface. <em>Intent drift</em> — the gradual shift of an agent's objective across a long session through accumulating adversarial context — is distinct from a single-event goal hijack and deserves explicit attention in threat modeling sessions.
+          </div>
+          <div class="threats-section">
+            <div class="threats-title">Threat Mappings</div>
+            <div class="threat-grid-header">
+              <div class="grid-col-title">Threat</div>
+              <div class="grid-col-title">OWASP Mapping</div>
+              <div class="grid-col-title">Notes</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">Prompt Injection (Direct & Indirect)</div><div class="threat-detail">Adversarial instructions overriding system prompt via user input or retrieved content</div></div>
+              <div class="owasp-badges"><span class="owasp-badge llm01">LLM01</span><span class="owasp-badge asi01">ASI01</span></div>
+              <div class="threat-detail">Most prevalent AI attack; indirect via RAG retrieval</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">Goal Hijacking</div><div class="threat-detail">Attacker redirects agent objective through adversarial context</div></div>
+              <div class="owasp-badges"><span class="owasp-badge asi01">ASI01</span><span class="owasp-badge asi07">ASI07</span></div>
+              <div class="threat-detail">Single-event manipulation of agent goals</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">Intent Drift</div><div class="threat-detail">Gradual shift of agent objective across long session through accumulating adversarial context</div></div>
+              <div class="owasp-badges"><span class="owasp-badge asi07">ASI07</span></div>
+              <div class="threat-detail">Distinct from goal hijacking; slow and hard to detect</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- R -->
+      <div class="category-card" id="cat-R">
+        <div class="cat-header" onclick="toggleCat(this)">
+          <div class="cat-letter" style="background:rgba(255,99,72,0.12); color:var(--R)">R</div>
+          <div class="cat-info">
+            <div class="cat-name" style="color:var(--R)">Resource Exhaustion</div>
+            <div class="cat-tagline">DoS, Denial of Wallet, multi-agent amplification loops</div>
+          </div>
+          <div class="cat-meta"><span class="chevron">▾</span></div>
+        </div>
+        <div class="cat-body">
+          <div class="cat-description">
+            <em>Denial of Wallet</em> — where API costs become a financial attack surface — is an AI-specific threat with no STRIDE equivalent. Recursive tool calls between agents can multiply resource consumption beyond single-agent rate limits, bypassing controls designed for isolated systems.
+          </div>
+          <div class="threats-section">
+            <div class="threats-title">Threat Mappings</div>
+            <div class="threat-grid-header">
+              <div class="grid-col-title">Threat</div>
+              <div class="grid-col-title">OWASP Mapping</div>
+              <div class="grid-col-title">Notes</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">Denial of Wallet</div><div class="threat-detail">API cost exploitation as a financial attack — triggering massive inference spend</div></div>
+              <div class="owasp-badges"><span class="owasp-badge llm10">LLM10</span></div>
+              <div class="threat-detail">AI-specific financial DoS; no STRIDE equivalent</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">Multi-Agent Amplification Loops</div><div class="threat-detail">Recursive tool calls between agents multiply resource consumption beyond rate limits</div></div>
+              <div class="owasp-badges"><span class="owasp-badge llm10">LLM10</span><span class="owasp-badge asi10">ASI10</span></div>
+              <div class="threat-detail">Bypasses single-agent rate limiting controls</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- I -->
+      <div class="category-card" id="cat-I">
+        <div class="cat-header" onclick="toggleCat(this)">
+          <div class="cat-letter" style="background:rgba(123,237,159,0.12); color:var(--I)">I</div>
+          <div class="cat-info">
+            <div class="cat-name" style="color:var(--I)">Identity & Privilege</div>
+            <div class="cat-tagline">NHI credentials, delegation chains, agent impersonation, inter-agent tampering</div>
+          </div>
+          <div class="cat-meta"><span class="chevron">▾</span></div>
+        </div>
+        <div class="cat-body">
+          <div class="cat-description">
+            As AI agents proliferate, they acquire their own credentials, roles, and delegation chains — a non-human identity (NHI) attack surface that neither STRIDE's Elevation of Privilege nor the OWASP LLM Top 10 adequately addresses. <em>Delegation chain attacks</em> — where privilege escalates through a sequence of individually authorized agent-to-agent delegations — are invisible to STRIDE.
+          </div>
+          <div class="threats-section">
+            <div class="threats-title">Threat Mappings</div>
+            <div class="threat-grid-header">
+              <div class="grid-col-title">Threat</div>
+              <div class="grid-col-title">OWASP Mapping</div>
+              <div class="grid-col-title">Notes</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">NHI Credential Abuse</div><div class="threat-detail">Agent credentials over-permissioned or misused across systems</div></div>
+              <div class="owasp-badges"><span class="owasp-badge asi03">ASI03</span></div>
+              <div class="threat-detail">LLM Top 10 has no equivalent; agentic-specific</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">Delegation Chain Attack</div><div class="threat-detail">Privilege escalates through legitimate agent-to-agent delegation sequence</div></div>
+              <div class="owasp-badges"><span class="owasp-badge asi03">ASI03</span><span class="owasp-badge asi07">ASI07</span></div>
+              <div class="threat-detail">Each delegation individually authorized; invisible to STRIDE</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- S — NOVEL -->
+      <div class="category-card novel" id="cat-S">
+        <div class="cat-header" onclick="toggleCat(this)">
+          <div class="cat-letter" style="background:rgba(112,161,255,0.12); color:var(--S)">S</div>
+          <div class="cat-info">
+            <div class="cat-name" style="color:var(--S)">Sharing & Isolation</div>
+            <div class="cat-tagline">Context window pollution, memory bleed, cross-tenant inference</div>
+          </div>
+          <div class="cat-meta">
+            <span class="novel-pill">★ Novel</span>
+            <span class="chevron">▾</span>
+          </div>
+        </div>
+        <div class="cat-body">
+          <div class="cat-description">
+            <em>Memory bleed</em> — one session's content leaking into another — and <em>cross-tenant inference</em> — one customer's data influencing another customer's LLM responses in a multi-tenant SaaS — are named by neither OWASP list. STRIDE would flag a shared database; it has no model for inference-layer contamination. These are PHANTOMRISE originals.
+          </div>
+          <div class="threats-section">
+            <div class="threats-title">Threat Mappings</div>
+            <div class="threat-grid-header">
+              <div class="grid-col-title">Threat</div>
+              <div class="grid-col-title">OWASP Mapping</div>
+              <div class="grid-col-title">Notes</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">Memory Bleed</div><div class="threat-detail">One session's content leaks into a different user's session via shared memory stores</div></div>
+              <div class="owasp-badges"><span class="novel-tag">★ Novel</span></div>
+              <div class="threat-detail">Not named in any existing framework</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">Cross-Tenant Inference</div><div class="threat-detail">One customer's data influences another customer's LLM responses in multi-tenant SaaS</div></div>
+              <div class="owasp-badges"><span class="novel-tag">★ Novel</span></div>
+              <div class="threat-detail">Inference-layer contamination; STRIDE cannot model this</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">Context Window Pollution</div><div class="threat-detail">Adversarial content injected into shared context affecting all downstream processing</div></div>
+              <div class="owasp-badges"><span class="owasp-badge asi10">ASI10</span></div>
+              <div class="threat-detail">Partial OWASP coverage under shared resource misuse</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- E -->
+      <div class="category-card" id="cat-E">
+        <div class="cat-header" onclick="toggleCat(this)">
+          <div class="cat-letter" style="background:rgba(236,204,104,0.12); color:var(--E)">E</div>
+          <div class="cat-info">
+            <div class="cat-name" style="color:var(--E)">Exposure & Output Handling</div>
+            <div class="cat-tagline">PII leakage, system prompt extraction, unsafe output piping</div>
+          </div>
+          <div class="cat-meta"><span class="chevron">▾</span></div>
+        </div>
+        <div class="cat-body">
+          <div class="cat-description">
+            E consolidates three OWASP output-side risks into one practitioner prompt: <em>what is this system putting out, and where is it going?</em> Exfiltration via tool invocation — a manipulated agent using a legitimate tool call to leak data — sits at the intersection of E and M and represents one of the most concrete AI attack chains in practice.
+          </div>
+          <div class="threats-section">
+            <div class="threats-title">Threat Mappings</div>
+            <div class="threat-grid-header">
+              <div class="grid-col-title">Threat</div>
+              <div class="grid-col-title">OWASP Mapping</div>
+              <div class="grid-col-title">Notes</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">PII / Sensitive Data Leakage</div><div class="threat-detail">Model outputs containing personal data, credentials, or confidential content</div></div>
+              <div class="owasp-badges"><span class="owasp-badge llm02">LLM02</span></div>
+              <div class="threat-detail">Core OWASP coverage</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">System Prompt Extraction</div><div class="threat-detail">Adversarial prompts revealing confidential system instructions</div></div>
+              <div class="owasp-badges"><span class="owasp-badge llm07">LLM07</span></div>
+              <div class="threat-detail">Reveals security controls and proprietary instructions</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">Unsafe Output Piping</div><div class="threat-detail">Unvalidated LLM output passed to downstream systems (shells, DBs, browsers)</div></div>
+              <div class="owasp-badges"><span class="owasp-badge llm05">LLM05</span></div>
+              <div class="threat-detail">Output as attack vector for downstream injection</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /listView -->
+
+    <!-- MATRIX VIEW -->
+    <div class="matrix-view" id="matrixView">
+      <p style="color:var(--muted); font-size:13px; margin-bottom:20px;">Each cell shows the PHANTOMRISE category covering that OWASP risk. ★ marks novel categories not in any existing framework.</p>
+      <div class="matrix-wrap">
+        <table class="matrix-table" id="matrixTable"></table>
+      </div>
+    </div>
+
+    <!-- COVERAGE VIEW -->
+    <div class="matrix-view" id="coverageView">
+      <p style="color:var(--muted); font-size:13px; margin-bottom:20px;">Every OWASP item mapped to its PHANTOMRISE category. Full 20/20 coverage across both lists.</p>
+      <div class="coverage-grid" id="coverageGrid"></div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /layout -->
+
+<!-- Legend -->
+<div class="legend">
+  <div class="legend-title">Framework Reference</div>
+  <div class="legend-cols">
+    <div>
+      <div class="legend-section-title">OWASP LLM Top 10 (2025)</div>
+      <div class="legend-grid">
+        <div class="legend-item"><span class="owasp-badge llm01">LLM01</span> Prompt Injection</div>
+        <div class="legend-item"><span class="owasp-badge llm02">LLM02</span> Sensitive Info Disclosure</div>
+        <div class="legend-item"><span class="owasp-badge llm03">LLM03</span> Supply Chain</div>
+        <div class="legend-item"><span class="owasp-badge llm04">LLM04</span> Data & Model Poisoning</div>
+        <div class="legend-item"><span class="owasp-badge llm05">LLM05</span> Improper Output Handling</div>
+        <div class="legend-item"><span class="owasp-badge llm06">LLM06</span> Excessive Agency</div>
+        <div class="legend-item"><span class="owasp-badge llm07">LLM07</span> System Prompt Leakage</div>
+        <div class="legend-item"><span class="owasp-badge llm08">LLM08</span> Vector & Embedding Weaknesses</div>
+        <div class="legend-item"><span class="owasp-badge llm09">LLM09</span> Misinformation</div>
+        <div class="legend-item"><span class="owasp-badge llm10">LLM10</span> Unbounded Consumption</div>
+      </div>
+    </div>
+    <div>
+      <div class="legend-section-title">OWASP Agentic Top 10 (2026)</div>
+      <div class="legend-grid">
+        <div class="legend-item"><span class="owasp-badge asi01">ASI01</span> Agent Goal Hijack</div>
+        <div class="legend-item"><span class="owasp-badge asi02">ASI02</span> Tool Misuse & Exploitation</div>
+        <div class="legend-item"><span class="owasp-badge asi03">ASI03</span> Identity & Privilege Abuse</div>
+        <div class="legend-item"><span class="owasp-badge asi04">ASI04</span> Agentic Supply Chain</div>
+        <div class="legend-item"><span class="owasp-badge asi05">ASI05</span> Data & Memory Poisoning</div>
+        <div class="legend-item"><span class="owasp-badge asi06">ASI06</span> Cascading Hallucination</div>
+        <div class="legend-item"><span class="owasp-badge asi07">ASI07</span> Intent Breaking & Goal Manipulation</div>
+        <div class="legend-item"><span class="owasp-badge asi08">ASI08</span> Excessive Autonomy</div>
+        <div class="legend-item"><span class="owasp-badge asi09">ASI09</span> Observability & Monitoring Failures</div>
+        <div class="legend-item"><span class="owasp-badge asi10">ASI10</span> Shared Resource Misuse</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer-brand">
+  PHANTOMRISE Framework · <a href="https://appsecmindset.com" target="_blank">appsecmindset.com</a> · Mudassir Syed
+</div>
+
+<script>
+  // ── Data ──────────────────────────────────────────────────────
+  const letters = ['P','H','A','N','T','O','M','R','I','S','E'];
+  const letterColors = {
+    P:'#ff6b6b', H:'#ff9f43', A:'#ffd32a', N:'#ff6bff',
+    T:'#00e5ff', O:'#48dbfb', M:'#ff4757', R:'#ff6348',
+    I:'#7bed9f', S:'#70a1ff', E:'#eccc68'
+  };
+  const letterNames = {
+    P:'Poisoning', H:'Hallucination', A:'Autonomy Failures',
+    N:'Non-determinism', T:'Trust & Supply Chain', O:'Observability Gaps',
+    M:'Manipulation', R:'Resource Exhaustion', I:'Identity & Privilege',
+    S:'Sharing & Isolation', E:'Exposure & Output Handling'
+  };
+  const novel = ['N','O','S'];
+
+  // OWASP → PHANTOMRISE mapping
+  const owaspMap = {
+    LLM01: {letters:['M'], label:'Prompt Injection'},
+    LLM02: {letters:['E','S'], label:'Sensitive Info Disclosure'},
+    LLM03: {letters:['T'], label:'Supply Chain'},
+    LLM04: {letters:['P'], label:'Data & Model Poisoning'},
+    LLM05: {letters:['E'], label:'Improper Output Handling'},
+    LLM06: {letters:['A'], label:'Excessive Agency'},
+    LLM07: {letters:['M','E'], label:'System Prompt Leakage'},
+    LLM08: {letters:['P'], label:'Vector & Embedding Weaknesses'},
+    LLM09: {letters:['H','N'], label:'Misinformation'},
+    LLM10: {letters:['R'], label:'Unbounded Consumption'},
+    ASI01: {letters:['M'], label:'Agent Goal Hijack'},
+    ASI02: {letters:['A'], label:'Tool Misuse & Exploitation'},
+    ASI03: {letters:['I'], label:'Identity & Privilege Abuse'},
+    ASI04: {letters:['T'], label:'Agentic Supply Chain'},
+    ASI05: {letters:['P'], label:'Data & Memory Poisoning'},
+    ASI06: {letters:['H'], label:'Cascading Hallucination'},
+    ASI07: {letters:['M','I'], label:'Intent Breaking & Goal Manipulation'},
+    ASI08: {letters:['A'], label:'Excessive Autonomy'},
+    ASI09: {letters:['O'], label:'Observability & Monitoring Failures'},
+    ASI10: {letters:['R','S'], label:'Shared Resource Misuse'},
+  };
+
+  // ── Matrix ────────────────────────────────────────────────────
+  function buildMatrix() {
+    const table = document.getElementById('matrixTable');
+    const owasp = Object.keys(owaspMap);
+
+    // Header row 1 — section labels
+    let thead = '<thead>';
+    thead += '<tr><th></th>';
+    thead += '<th colspan="10" style="text-align:center; color:#74c0fc; border-bottom:1px solid rgba(112,161,255,0.2)">OWASP LLM Top 10 (2025)</th>';
+    thead += '<th colspan="10" style="text-align:center; color:#f472b6; border-bottom:1px solid rgba(244,114,182,0.2)">OWASP Agentic Top 10 (2026)</th>';
+    thead += '</tr>';
+
+    // Header row 2 — individual items
+    thead += '<tr><th style="text-align:left">PHANTOMRISE</th>';
+    owasp.forEach(k => {
+      const isASI = k.startsWith('ASI');
+      const color = isASI ? '#f472b6' : '#74c0fc';
+      thead += `<th style="color:${color}">${k}</th>`;
+    });
+    thead += '</tr></thead>';
+    table.innerHTML = thead;
+
+    // Body
+    let tbody = '<tbody>';
+    letters.forEach(l => {
+      const isNovel = novel.includes(l);
+      const c = letterColors[l];
+      tbody += `<tr>`;
+      tbody += `<td style="color:${c}; font-weight:700">${isNovel ? '★ ' : ''}${l} — ${letterNames[l]}</td>`;
+      owasp.forEach(k => {
+        const maps = owaspMap[k].letters.includes(l);
+        if (maps) {
+          tbody += `<td style="text-align:center"><div class="matrix-dot" style="background:${c}; box-shadow:0 0 6px ${c}40"></div></td>`;
+        } else {
+          tbody += `<td></td>`;
+        }
+      });
+      tbody += `</tr>`;
+    });
+    tbody += '</tbody>';
+    table.innerHTML += tbody;
+  }
+
+  // ── Coverage ──────────────────────────────────────────────────
+  function buildCoverage() {
+    const grid = document.getElementById('coverageGrid');
+    Object.entries(owaspMap).forEach(([k, v]) => {
+      const isASI = k.startsWith('ASI');
+      const badgeClass = isASI ? k.toLowerCase().replace('-','') : k.toLowerCase().replace('-','');
+      const badgeColor = isASI ? '#f472b6' : '#74c0fc';
+      const div = document.createElement('div');
+      div.className = 'coverage-card';
+      const letterBadges = v.letters.map(l => {
+        const c = letterColors[l];
+        const n = novel.includes(l) ? ' ★' : '';
+        return `<span style="background:${c}20; color:${c}; border:1px solid ${c}40; font-family:'Space Mono',monospace; font-size:10px; padding:2px 8px; border-radius:3px; font-weight:700">${l}${n}</span>`;
+      }).join('');
+      div.innerHTML = `
+        <div class="coverage-owasp">
+          <span class="owasp-badge ${badgeClass}" style="font-size:10px">${k}</span>
+          <span style="font-size:13px; font-weight:600; color:var(--text)">${v.label}</span>
+        </div>
+        <div class="coverage-maps-to">
+          <span>Maps to:</span> ${letterBadges}
+        </div>
+      `;
+      grid.appendChild(div);
+    });
+  }
+
+  // ── UI ────────────────────────────────────────────────────────
+  function toggleCat(header) {
+    header.parentElement.classList.toggle('expanded');
+    const chevron = header.querySelector('.chevron');
+    if (chevron) chevron.style.transform =
+      header.parentElement.classList.contains('expanded') ? 'rotate(180deg)' : 'rotate(0deg)';
+  }
+
+  function scrollTo(letter, btn) {
+    document.querySelectorAll('.letter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const el = document.getElementById('cat-' + letter);
+    if (el) {
+      el.classList.add('expanded');
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  function setTab(tab, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('listView').className = tab === 'list' ? 'list-view' : 'list-view hidden';
+    document.getElementById('matrixView').className = tab === 'matrix' ? 'matrix-view visible' : 'matrix-view';
+    document.getElementById('coverageView').className = tab === 'coverage' ? 'matrix-view visible' : 'matrix-view';
+  }
+
+  // Init
+  buildMatrix();
+  buildCoverage();
+</script>
+</body>
+</html>
