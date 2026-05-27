@@ -705,6 +705,10 @@
     <div class="stat-label">OWASP Items Covered</div>
   </div>
   <div class="stat">
+    <div class="stat-num">3</div>
+    <div class="stat-label">Novel Categories</div>
+  </div>
+  <div class="stat">
     <div class="stat-num">100%</div>
     <div class="stat-label">OWASP Coverage</div>
   </div>
@@ -714,6 +718,7 @@
   <button class="tab-btn active" onclick="setTab('list', this)">Category View</button>
   <button class="tab-btn" onclick="setTab('matrix', this)">Coverage Matrix</button>
   <button class="tab-btn" onclick="setTab('coverage', this)">OWASP Coverage</button>
+  <button class="tab-btn" onclick="setTab('mitigations', this)">Mitigations</button>
 </div>
 
 <div class="layout">
@@ -1210,6 +1215,12 @@
       <div class="coverage-grid" id="coverageGrid"></div>
     </div>
 
+    <!-- MITIGATIONS VIEW -->
+    <div class="matrix-view" id="mitigationsView">
+      <p style="color:var(--muted); font-size:13px; margin-bottom:20px;">Practical mitigations for each PHANTOMRISE category. ★ marks novel categories not in any existing framework.</p>
+      <div id="mitigationsGrid"></div>
+    </div>
+
   </div><!-- /main -->
 </div><!-- /layout -->
 
@@ -1364,7 +1375,160 @@
     });
   }
 
-  // ── UI ────────────────────────────────────────────────────────
+  // ── Mitigations Data ─────────────────────────────────────────
+  const mitigations = {
+    P: {
+      name: 'Poisoning',
+      novel: false,
+      items: [
+        { title: 'Input Validation & Data Provenance', detail: 'Validate all data entering training pipelines and RAG stores. Track provenance of every dataset used in training or retrieval.' },
+        { title: 'Signed Datasets & Model Cards', detail: 'Cryptographically sign training datasets. Maintain model cards documenting data sources, preprocessing steps, and known limitations.' },
+        { title: 'Eval Set Integrity Checks', detail: 'Treat evaluation datasets as security artifacts. Store separately, version-controlled, with access controls to prevent tampering.' },
+        { title: 'RAG Store Access Controls', detail: 'Apply least-privilege access to retrieval stores. Audit all writes to vector databases and memory stores.' }
+      ]
+    },
+    H: {
+      name: 'Hallucination',
+      novel: false,
+      items: [
+        { title: 'Retrieval-Augmented Generation (RAG)', detail: 'Ground outputs in retrieved, cited sources. Reduce reliance on model memory for factual claims.' },
+        { title: 'Human-in-the-Loop for High-Stakes Outputs', detail: 'Require human review before acting on LLM outputs in critical workflows — medical, legal, financial, infrastructure.' },
+        { title: 'Confidence Scoring & Output Grounding', detail: 'Flag low-confidence outputs before they reach users or downstream systems. Implement output verification layers.' },
+        { title: 'Factuality Benchmarks & Red Teaming', detail: 'Regularly test models against factuality benchmarks. Red team for overconfident false outputs in domain-specific scenarios.' }
+      ]
+    },
+    A: {
+      name: 'Autonomy Failures',
+      novel: false,
+      items: [
+        { title: 'Explicit Scope Boundaries Per Agent', detail: 'Define and enforce what each agent can and cannot do. Scope boundaries should be coded, not just documented.' },
+        { title: 'Human-in-the-Loop for Irreversible Actions', detail: 'Any action that cannot be undone — deleting data, sending emails, making purchases — must require human confirmation.' },
+        { title: 'Kill Switches & Session Time Limits', detail: 'Every agent deployment needs a reliable kill switch. Set maximum session durations to prevent unbounded autonomous operation.' },
+        { title: 'Least-Privilege Tool Access', detail: 'Grant agents only the tools they need for the current task. Revoke access after task completion.' }
+      ]
+    },
+    N: {
+      name: 'Non-determinism',
+      novel: true,
+      items: [
+        { title: 'Consistency Testing', detail: 'Run the same prompt multiple times across different sampling conditions. Safety controls should hold across all runs, not just on average.' },
+        { title: 'Temperature & Sampling Controls', detail: 'For safety-critical use cases, reduce temperature and top-p settings to lower output variance. Use deterministic decoding (temp=0) where safety is paramount.' },
+        { title: 'Statistical Red Teaming', detail: 'Test for statistical jailbreaking — repeat adversarial prompts at scale to find safety failures that only emerge through sampling variance.' },
+        { title: 'Incident Reproduction Protocols', detail: 'Since exact incident reproduction may be impossible, log full context including model version, temperature, seed, and prompt at the time of any security event.' }
+      ]
+    },
+    T: {
+      name: 'Trust & Supply Chain',
+      novel: false,
+      items: [
+        { title: 'Model Provenance Verification', detail: 'Verify the source and integrity of base models before deployment. Use cryptographic signatures where available. Prefer models with documented training provenance.' },
+        { title: 'MCP Server Allowlisting', detail: 'Only allow pre-approved MCP servers and plugins. Treat any third-party tool server as untrusted until vetted.' },
+        { title: 'Third-Party Agent Vetting', detail: 'Before using marketplace agents, review their tool permissions, data access, and update history. Apply the same rigor as third-party software dependencies.' },
+        { title: 'AI Software Bill of Materials (SBOM)', detail: 'Maintain an AI-SBOM documenting all model components, plugins, and dependencies. Update on every change.' }
+      ]
+    },
+    O: {
+      name: 'Observability Gaps',
+      novel: true,
+      items: [
+        { title: 'End-to-End Agent Trace Logging', detail: 'Log every step of an agent\'s decision process — what it retrieved, what it reasoned, what tools it called, and what it produced. Traces should be causal, not just sequential.' },
+        { title: 'Anomaly Detection on Agent Actions', detail: 'Baseline normal agent behavior and alert on deviations — unexpected tool invocations, unusual data access patterns, abnormal output lengths or content.' },
+        { title: 'Audit Trails for Autonomous Decisions', detail: 'Every irreversible or high-impact action taken autonomously must be auditable. Who triggered it, what context the agent had, and what it decided.' },
+        { title: 'Alerting on Unexpected Tool Invocations', detail: 'Alert when an agent calls a tool it has not called before, or calls a tool in an unexpected sequence. Treat novel tool use as a potential indicator of manipulation.' }
+      ]
+    },
+    M: {
+      name: 'Manipulation',
+      novel: false,
+      items: [
+        { title: 'Input Sanitization & Prompt Injection Detection', detail: 'Scan inputs for known injection patterns. Treat all user-supplied content as untrusted, including content retrieved via RAG or passed from other agents.' },
+        { title: 'System Prompt Hardening', detail: 'Separate system prompt from user input at the architecture level. Never concatenate them in ways that allow user input to override system instructions.' },
+        { title: 'Output Filtering for Instruction Leakage', detail: 'Filter outputs for system prompt content before returning to users. Monitor for prompt extraction attempts.' },
+        { title: 'Intent Monitoring Across Long Sessions', detail: 'Track agent goal state across a session. Alert when stated objectives drift from the original task — a potential indicator of intent drift attacks.' }
+      ]
+    },
+    R: {
+      name: 'Resource Exhaustion',
+      novel: false,
+      items: [
+        { title: 'Rate Limiting Per Session & User', detail: 'Enforce token, request, and cost limits per session, user, and API key. Do not rely on provider-level rate limits alone.' },
+        { title: 'Cost Alerts & Budget Caps', detail: 'Set hard spending limits on API usage. Alert at threshold percentages before hard caps are hit. Denial of Wallet attacks can be financially significant.' },
+        { title: 'Recursive Call Depth Limits', detail: 'Limit the depth of agent-to-agent tool calls. Prevent recursive amplification loops from multiplying resource consumption beyond single-agent controls.' },
+        { title: 'Timeout Policies on Long-Running Tasks', detail: 'Set maximum execution times for agent tasks. Automatically terminate sessions that exceed time or cost thresholds.' }
+      ]
+    },
+    I: {
+      name: 'Identity & Privilege',
+      novel: false,
+      items: [
+        { title: 'Least-Privilege NHI Credentials', detail: 'Each agent should have its own identity with the minimum permissions needed. Avoid shared credentials across agents or sessions.' },
+        { title: 'Short-Lived Tokens for Agent Authentication', detail: 'Use short-lived, scoped tokens for agent authentication. Rotate frequently. Never use long-lived API keys for autonomous agent workflows.' },
+        { title: 'Delegation Chain Audit Logging', detail: 'Log every delegation event in agent-to-agent communication. Flag unusually long or unexpected delegation chains for review.' },
+        { title: 'Agent Identity Verification', detail: 'Before accepting instructions from a peer agent, verify its identity. Do not assume messages from within a multi-agent system are trustworthy.' }
+      ]
+    },
+    S: {
+      name: 'Sharing & Isolation',
+      novel: true,
+      items: [
+        { title: 'Strict Session Isolation', detail: 'Ensure no context, memory, or state is shared between sessions or tenants. Isolation must be enforced at the infrastructure level, not just application logic.' },
+        { title: 'Memory Store Partitioning Per Tenant', detail: 'In multi-tenant deployments, each tenant must have a completely isolated memory and vector store. Cross-tenant read access is a security boundary violation.' },
+        { title: 'No Shared Context Windows Across Sessions', detail: 'Never reuse or append context windows across different user sessions. Each session must start with a clean context.' },
+        { title: 'Regular Memory Store Flushing', detail: 'Implement TTL (time-to-live) policies on agent memory. Flush memory stores between sessions to prevent bleed of sensitive content across interactions.' }
+      ]
+    },
+    E: {
+      name: 'Exposure & Output Handling',
+      novel: false,
+      items: [
+        { title: 'Output Filtering for PII & Sensitive Data', detail: 'Scan all LLM outputs before returning to users or piping to downstream systems. Detect and redact PII, credentials, and confidential content.' },
+        { title: 'System Prompt Access Controls', detail: 'Treat system prompts as confidential configuration. Restrict access, version-control them, and monitor outputs for prompt extraction attempts.' },
+        { title: 'Sandboxed Output Processing', detail: 'Never pipe raw LLM output directly to shells, databases, or browsers. Process and validate output in a sandboxed environment before downstream use.' },
+        { title: 'Data Loss Prevention (DLP) on Outputs', detail: 'Apply DLP policies to model outputs, especially in enterprise deployments. Flag outputs containing classification markers, internal references, or known sensitive patterns.' }
+      ]
+    }
+  };
+
+  // ── Build Mitigations ─────────────────────────────────────────
+  function buildMitigations() {
+    const grid = document.getElementById('mitigationsGrid');
+    letters.forEach(l => {
+      const m = mitigations[l];
+      const c = letterColors[l];
+      const isNovel = novel.includes(l);
+
+      const card = document.createElement('div');
+      card.className = 'category-card' + (isNovel ? ' novel' : '');
+      card.style.marginBottom = '16px';
+
+      const novelPill = isNovel ? `<span class="novel-pill">★ Novel</span>` : '';
+
+      card.innerHTML = `
+        <div class="cat-header" onclick="toggleCat(this)">
+          <div class="cat-letter" style="background:${c}18; color:${c}">${l}</div>
+          <div class="cat-info">
+            <div class="cat-name" style="color:${c}">${m.name}</div>
+            <div class="cat-tagline">${m.items.length} mitigations</div>
+          </div>
+          <div class="cat-meta">${novelPill}<span class="chevron">▾</span></div>
+        </div>
+        <div class="cat-body">
+          <div class="threats-section">
+            <div class="threats-title">Recommended Controls</div>
+            ${m.items.map((item, i) => `
+              <div class="threat-row" style="grid-template-columns: 1fr 2fr">
+                <div>
+                  <div class="threat-name" style="color:${c}">${item.title}</div>
+                </div>
+                <div class="threat-detail">${item.detail}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  }
   function toggleCat(header) {
     header.parentElement.classList.toggle('expanded');
     const chevron = header.querySelector('.chevron');
@@ -1388,11 +1552,13 @@
     document.getElementById('listView').className = tab === 'list' ? 'list-view' : 'list-view hidden';
     document.getElementById('matrixView').className = tab === 'matrix' ? 'matrix-view visible' : 'matrix-view';
     document.getElementById('coverageView').className = tab === 'coverage' ? 'matrix-view visible' : 'matrix-view';
+    document.getElementById('mitigationsView').className = tab === 'mitigations' ? 'matrix-view visible' : 'matrix-view';
   }
 
   // Init
   buildMatrix();
   buildCoverage();
+  buildMitigations();
 </script>
 </body>
 </html>
