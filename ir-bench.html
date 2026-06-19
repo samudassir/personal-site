@@ -328,6 +328,9 @@
       color: var(--text);
     }
     .heatmap tr:hover { background: var(--bg-card-hover); }
+    .heatmap-row-partial td:first-child {
+      color: var(--text-secondary);
+    }
 
     /* ── Content Sections ── */
     .section {
@@ -551,7 +554,7 @@
   <div class="container">
     <div class="chart-section">
       <h2 class="chart-section__title">Model Comparison</h2>
-      <p class="chart-section__subtitle">Overall reasoning quality across 5 fully evaluated models (Gemini 2.5 Flash judge)</p>
+      <p class="chart-section__subtitle">Overall reasoning quality &middot; Claude Fable 5 shown for 21 completed scenarios (*)</p>
       <div class="chart-wrap">
         <canvas id="overallChart"></canvas>
       </div>
@@ -603,7 +606,7 @@
   <div class="container">
     <div class="chart-section">
       <h2 class="chart-section__title">Dimension Breakdown</h2>
-      <p class="chart-section__subtitle">Score by reasoning dimension — where each model excels and struggles</p>
+      <p class="chart-section__subtitle">Score by reasoning dimension &middot; includes Claude Fable 5 full run (42) and completed-only (21) rows</p>
       <div class="heatmap-wrap">
         <table class="heatmap" id="heatmapTable">
           <thead>
@@ -620,6 +623,7 @@
           </thead>
           <tbody></tbody>
         </table>
+        <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.75rem;">* Claude Fable 5 partial run: &ldquo;all 42&rdquo; includes API failures scored as 0%; &ldquo;21 completed&rdquo; reflects scenarios with a model response.</p>
       </div>
     </div>
   </div>
@@ -628,7 +632,7 @@
   <div class="container">
     <div class="chart-section">
       <h2 class="chart-section__title">Performance Radar</h2>
-      <p class="chart-section__subtitle">Reasoning profile across all 7 dimensions — the shape of each model's strengths</p>
+      <p class="chart-section__subtitle">Reasoning profile across 7 dimensions &middot; Claude Fable 5 trace is 21 completed scenarios only</p>
       <div class="chart-wrap" style="height: 480px;">
         <canvas id="radarChart"></canvas>
       </div>
@@ -639,7 +643,7 @@
   <div class="container">
     <div class="chart-section">
       <h2 class="chart-section__title">Hard vs. Medium Scenarios</h2>
-      <p class="chart-section__subtitle">How models perform under increased scenario difficulty</p>
+      <p class="chart-section__subtitle">Performance by difficulty &middot; Claude Fable 5 bars reflect 21 completed scenarios (*)</p>
       <div class="chart-wrap">
         <canvas id="difficultyChart"></canvas>
       </div>
@@ -800,18 +804,51 @@
 
   <script>
     const DATA = {
-      models: ['o3', 'Claude Sonnet 4.6', 'Gemini 2.5 Pro', 'GPT-4o', 'Mistral 7B'],
-      modelKeys: ['o3', 'claude-sonnet-4-6', 'gemini-2.5-pro', 'gpt-4o', 'mistral'],
-      overall: [91.5, 91.4, 85.0, 53.6, 45.8],
-      hard:    [92.3, 91.5, 84.4, 55.2, 48.8],
-      medium:  [89.0, 91.2, 86.8, 48.4, 35.7],
+      models: [
+        'o3',
+        'Claude Sonnet 4.6',
+        'Claude Fable 5*',
+        'Gemini 2.5 Pro',
+        'GPT-4o',
+        'Mistral 7B'
+      ],
+      modelKeys: [
+        'o3',
+        'claude-sonnet-4-6',
+        'claude-fable-5-completed',
+        'gemini-2.5-pro',
+        'gpt-4o',
+        'mistral'
+      ],
+      overall: [91.5, 91.4, 91.8, 85.0, 53.6, 45.8],
+      hard:    [92.3, 91.5, 91.5, 84.4, 55.2, 48.8],
+      medium:  [89.0, 91.2, 92.9, 86.8, 48.4, 35.7],
       dimensions: {
-        'o3':                 [97.3, 96.5, 81.4, 90.3, 75.2, 100.0, 100.0],
-        'claude-sonnet-4-6':  [99.1, 98.2, 90.3, 91.2, 71.7,  92.0,  97.3],
-        'gemini-2.5-pro':     [97.3, 91.2, 72.6, 73.5, 69.9,  97.3,  92.9],
-        'gpt-4o':             [81.4, 58.4, 42.5, 38.1, 31.0,  71.7,  52.2],
-        'mistral':            [58.4, 52.2, 40.7, 37.2, 31.9,  58.4,  41.6]
+        'o3':                        [97.3, 96.5, 81.4, 90.3, 75.2, 100.0, 100.0],
+        'claude-sonnet-4-6':         [99.1, 98.2, 90.3, 91.2, 71.7,  92.0,  97.3],
+        'claude-fable-5-all':        [49.6, 49.6, 43.4, 44.2, 33.6,  49.6,  48.7],
+        'claude-fable-5-completed':  [100.0, 100.0, 87.5, 89.3, 67.9, 100.0,  98.2],
+        'gemini-2.5-pro':            [97.3, 91.2, 72.6, 73.5, 69.9,  97.3,  92.9],
+        'gpt-4o':                    [81.4, 58.4, 42.5, 38.1, 31.0,  71.7,  52.2],
+        'mistral':                   [58.4, 52.2, 40.7, 37.2, 31.9,  58.4,  41.6]
       },
+      heatmapRows: [
+        { label: 'o3', key: 'o3', partial: false },
+        { label: 'Claude Sonnet 4.6', key: 'claude-sonnet-4-6', partial: false },
+        { label: 'Claude Fable 5 (21 completed)', key: 'claude-fable-5-completed', partial: true },
+        { label: 'Claude Fable 5 (all 42)', key: 'claude-fable-5-all', partial: true },
+        { label: 'Gemini 2.5 Pro', key: 'gemini-2.5-pro', partial: false },
+        { label: 'GPT-4o', key: 'gpt-4o', partial: false },
+        { label: 'Mistral 7B', key: 'mistral', partial: false }
+      ],
+      radarRows: [
+        { label: 'o3', key: 'o3' },
+        { label: 'Claude Sonnet 4.6', key: 'claude-sonnet-4-6' },
+        { label: 'Claude Fable 5 (21 completed)', key: 'claude-fable-5-completed' },
+        { label: 'Gemini 2.5 Pro', key: 'gemini-2.5-pro' },
+        { label: 'GPT-4o', key: 'gpt-4o' },
+        { label: 'Mistral 7B', key: 'mistral' }
+      ],
       dimLabels: [
         'Decision\nFraming',
         'Tradeoff\nArticulation',
@@ -822,6 +859,15 @@
         'Action\nSpecificity'
       ]
     };
+
+    const barColors = [
+      'rgba(124, 156, 245, 0.85)',
+      'rgba(124, 156, 245, 0.85)',
+      'rgba(34, 197, 94, 0.85)',
+      'rgba(124, 156, 245, 0.85)',
+      'rgba(124, 156, 245, 0.85)',
+      'rgba(124, 156, 245, 0.85)'
+    ];
 
     const chartColors = {
       bar: 'rgba(124, 156, 245, 0.85)',
@@ -840,8 +886,8 @@
         datasets: [{
           label: 'Overall Score',
           data: DATA.overall,
-          backgroundColor: chartColors.bar,
-          borderColor: chartColors.barBorder,
+          backgroundColor: barColors,
+          borderColor: barColors.map(c => c.replace('0.85', '1')),
           borderWidth: 1,
           borderRadius: 6,
           maxBarThickness: 80
@@ -999,7 +1045,8 @@
     const radarColors = [
       { bg: 'rgba(99, 102, 241, 0.15)',  border: 'rgba(99, 102, 241, 0.9)' },
       { bg: 'rgba(124, 156, 245, 0.12)', border: 'rgba(124, 156, 245, 0.9)' },
-      { bg: 'rgba(34, 197, 94, 0.12)',   border: 'rgba(34, 197, 94, 0.8)' },
+      { bg: 'rgba(34, 197, 94, 0.15)',   border: 'rgba(34, 197, 94, 0.9)' },
+      { bg: 'rgba(168, 85, 247, 0.12)',  border: 'rgba(168, 85, 247, 0.8)' },
       { bg: 'rgba(234, 179, 8, 0.10)',   border: 'rgba(234, 179, 8, 0.7)' },
       { bg: 'rgba(239, 68, 68, 0.10)',   border: 'rgba(239, 68, 68, 0.7)' }
     ];
@@ -1016,9 +1063,9 @@
       type: 'radar',
       data: {
         labels: radarLabels,
-        datasets: DATA.modelKeys.map((key, i) => ({
-          label: DATA.models[i],
-          data: DATA.dimensions[key],
+        datasets: DATA.radarRows.map((row, i) => ({
+          label: row.label,
+          data: DATA.dimensions[row.key],
           backgroundColor: radarColors[i].bg,
           borderColor: radarColors[i].border,
           borderWidth: 2,
@@ -1085,13 +1132,15 @@
     }
 
     const tbody = document.querySelector('#heatmapTable tbody');
-    DATA.modelKeys.forEach((key, i) => {
+    DATA.heatmapRows.forEach(row => {
       const tr = document.createElement('tr');
+      if (row.partial) tr.classList.add('heatmap-row-partial');
+
       const tdName = document.createElement('td');
-      tdName.textContent = DATA.models[i];
+      tdName.textContent = row.label;
       tr.appendChild(tdName);
 
-      DATA.dimensions[key].forEach(val => {
+      DATA.dimensions[row.key].forEach(val => {
         const td = document.createElement('td');
         td.textContent = val.toFixed(1) + '%';
         td.style.backgroundColor = heatColor(val);
