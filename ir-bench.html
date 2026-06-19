@@ -204,6 +204,36 @@
       color: var(--text-muted);
     }
 
+    /* ── Status Banner ── */
+    .status-banner {
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin: 0 0 2rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+    .status-banner__badge {
+      flex-shrink: 0;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      background: rgba(99, 102, 241, 0.2);
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      margin-top: 0.1rem;
+    }
+    .status-banner__text {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .status-banner__text strong { color: var(--text); }
+
     /* ── Responsive ── */
     @media (max-width: 900px) {
       .sidebar { display: none; }
@@ -482,8 +512,18 @@
   <header class="hero container" id="dashboard">
     <h1 class="hero__title">IR<span>-Bench</span></h1>
     <p class="hero__subtitle">A Benchmark for LLM Reasoning in Incident Response</p>
-    <p class="hero__meta">Mudassir Syed &middot; May 2026</p>
+    <p class="hero__meta">Mudassir Syed &middot; Initial findings &middot; May 2026</p>
   </header>
+
+  <!-- Initial Findings Banner -->
+  <div class="container">
+    <div class="status-banner">
+      <span class="status-banner__badge">Initial Findings</span>
+      <p class="status-banner__text">
+        These are <strong>preliminary results</strong> from the first full run: 5 models, 42 scenarios, 7 reasoning dimensions, judged by Gemini 2.5 Flash. Rankings are stable across a dual-judge check (GPT-5 on 18 scenarios), but judge consistency testing, additional models, and dataset expansion are still in progress.
+      </p>
+    </div>
+  </div>
 
   <!-- Stats Row -->
   <div class="container">
@@ -511,7 +551,7 @@
   <div class="container">
     <div class="chart-section">
       <h2 class="chart-section__title">Model Comparison</h2>
-      <p class="chart-section__subtitle">Overall reasoning quality across all evaluated models</p>
+      <p class="chart-section__subtitle">Overall reasoning quality — initial findings across all evaluated models</p>
       <div class="chart-wrap">
         <canvas id="overallChart"></canvas>
       </div>
@@ -648,7 +688,10 @@
   <div class="container">
     <section class="section" id="findings">
       <p class="section__label">Key Findings</p>
-      <h2 class="section__title">What the Data Shows</h2>
+      <h2 class="section__title">Initial Findings</h2>
+      <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.5rem; max-width: 780px;">
+        Based on the first complete benchmark run. These patterns are consistent across dimensions and hold under dual-judge validation, but should be treated as early evidence rather than final conclusions.
+      </p>
       <div class="findings-grid">
         <div class="finding-card">
           <div class="finding-card__num">Finding 01</div>
@@ -686,14 +729,15 @@
   <div class="container">
     <section class="section" id="limitations">
       <p class="section__label">Transparency</p>
-      <h2 class="section__title">Limitations</h2>
+      <h2 class="section__title">Limitations &amp; What's Next</h2>
       <div class="limitations">
         <ul>
-          <li><strong>Dataset size:</strong> 42 scenarios are sufficient for initial findings and clear tier separation, but not statistically powered for fine-grained claims (e.g., 91.5% vs 91.4%).</li>
-          <li><strong>LLM-as-judge:</strong> Automated scoring has known biases. This is mitigated by rubric-based pointwise scoring and dual-judge validation with consistent rankings.</li>
-          <li><strong>Judge-model overlap:</strong> Gemini 2.5 Flash (judge) is in the same model family as Gemini 2.5 Pro (tested). This is disclosed; the rubric anchors scoring to criteria, not model preference.</li>
-          <li><strong>Retrospective scenarios:</strong> All scenarios are based on past incidents. Real IR involves live, evolving information that is not captured here.</li>
-          <li><strong>Single run:</strong> Each model was evaluated once. Run-to-run variance at low temperatures is typically small but not measured.</li>
+          <li><strong>Preliminary release:</strong> This page publishes initial findings from the first full benchmark run. Results may shift as more models, scenarios, and judge validation are added.</li>
+          <li><strong>Dataset size:</strong> 42 scenarios show clear tier separation, but are not statistically powered for fine-grained claims (e.g., 91.5% vs 91.4%).</li>
+          <li><strong>LLM-as-judge:</strong> Automated scoring has known biases. Mitigated by rubric-based pointwise scoring and dual-judge validation (GPT-5 on 18 scenarios produced identical ranking).</li>
+          <li><strong>Judge-model overlap:</strong> Gemini 2.5 Flash (judge) is in the same model family as Gemini 2.5 Pro (tested). Disclosed; rubric anchors scoring to criteria, not model preference.</li>
+          <li><strong>Retrospective scenarios:</strong> All scenarios are based on past incidents. Real IR involves live, evolving information not captured here.</li>
+          <li><strong>In progress:</strong> Judge consistency testing, mid-tier models (GPT-4.1, o4-mini), open-source harness release, and dataset expansion.</li>
         </ul>
       </div>
     </section>
