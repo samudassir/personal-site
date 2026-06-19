@@ -512,15 +512,15 @@
   <header class="hero container" id="dashboard">
     <h1 class="hero__title">IR<span>-Bench</span></h1>
     <p class="hero__subtitle">A Benchmark for LLM Reasoning in Incident Response</p>
-    <p class="hero__meta">Mudassir Syed &middot; Initial findings &middot; May 2026</p>
+    <p class="hero__meta">Mudassir Syed &middot; Updated June 2026</p>
   </header>
 
-  <!-- Initial Findings Banner -->
+  <!-- Claude Fable Partial Run Banner -->
   <div class="container">
     <div class="status-banner">
-      <span class="status-banner__badge">Initial Findings</span>
+      <span class="status-banner__badge">Partial Run</span>
       <p class="status-banner__text">
-        These are <strong>preliminary results</strong> from the first full run: 5 models, 42 scenarios, 7 reasoning dimensions, judged by Gemini 2.5 Flash. Rankings are stable across a dual-judge check (GPT-5 on 18 scenarios), but judge consistency testing, additional models, and dataset expansion are still in progress.
+        <strong>Claude Fable 5</strong> completed <strong>21 of 42 scenarios</strong> before Anthropic API credits ran out. Failed scenarios scored 0%, pulling the headline score to 45.5%. On completed scenarios only, Fable scored <strong>91.8%</strong> &mdash; in line with o3 (91.5%) and Claude Sonnet 4.6 (91.4%). Run will resume when credits are restored.
       </p>
     </div>
   </div>
@@ -533,7 +533,7 @@
         <div class="stat-card__label">Scenarios</div>
       </div>
       <div class="stat-card">
-        <div class="stat-card__value">5</div>
+        <div class="stat-card__value">6</div>
         <div class="stat-card__label">Models</div>
       </div>
       <div class="stat-card">
@@ -551,10 +551,51 @@
   <div class="container">
     <div class="chart-section">
       <h2 class="chart-section__title">Model Comparison</h2>
-      <p class="chart-section__subtitle">Overall reasoning quality — initial findings across all evaluated models</p>
+      <p class="chart-section__subtitle">Overall reasoning quality across 5 fully evaluated models (Gemini 2.5 Flash judge)</p>
       <div class="chart-wrap">
         <canvas id="overallChart"></canvas>
       </div>
+    </div>
+  </div>
+
+  <!-- Claude Fable Partial Run -->
+  <div class="container">
+    <div class="chart-section">
+      <h2 class="chart-section__title">Claude Fable 5 &mdash; Partial Run</h2>
+      <p class="chart-section__subtitle">21/42 scenarios completed &middot; API failures on remaining scenarios scored as 0%</p>
+      <div class="chart-wrap" style="height: 320px;">
+        <canvas id="fableChart"></canvas>
+      </div>
+      <table class="heatmap" style="margin-top: 1.5rem;">
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>All 42 Scenarios</th>
+            <th>21 Completed Only</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Overall</td>
+            <td style="color: var(--red);">45.5%</td>
+            <td style="color: var(--green);">91.8%</td>
+          </tr>
+          <tr>
+            <td>Hard scenarios</td>
+            <td style="color: var(--red);">44.2%</td>
+            <td style="color: var(--green);">91.5%</td>
+          </tr>
+          <tr>
+            <td>Medium scenarios</td>
+            <td style="color: var(--yellow);">50.0%</td>
+            <td style="color: var(--green);">92.9%</td>
+          </tr>
+          <tr>
+            <td>Scenarios with API response</td>
+            <td colspan="2" style="text-align: center; color: var(--text-secondary);">21 / 42 (50%)</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
@@ -672,6 +713,7 @@
       <p>
         <strong>o3</strong> (OpenAI, reasoning-class) &middot;
         <strong>Claude Sonnet 4.6</strong> (Anthropic, reasoning-class) &middot;
+        <strong>Claude Fable 5</strong> (Anthropic, reasoning-class &mdash; partial run, 21/42) &middot;
         <strong>Gemini 2.5 Pro</strong> (Google, reasoning-class) &middot;
         <strong>GPT-4o</strong> (OpenAI, general-purpose) &middot;
         <strong>Mistral 7B</strong> (Mistral AI, open-source local)
@@ -688,34 +730,38 @@
   <div class="container">
     <section class="section" id="findings">
       <p class="section__label">Key Findings</p>
-      <h2 class="section__title">Initial Findings</h2>
-      <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.5rem; max-width: 780px;">
-        Based on the first complete benchmark run. These patterns are consistent across dimensions and hold under dual-judge validation, but should be treated as early evidence rather than final conclusions.
-      </p>
+      <h2 class="section__title">What the Data Shows</h2>
       <div class="findings-grid">
         <div class="finding-card">
           <div class="finding-card__num">Finding 01</div>
+          <div class="finding-card__title">Claude Fable: Partial Run, Frontier Performance</div>
+          <div class="finding-card__body">
+            Claude Fable 5 scored 45.5% across all 42 scenarios, but only 21 completed before API credits expired &mdash; the rest scored 0%. On completed scenarios, Fable scored <strong>91.8%</strong>, matching o3 and Claude Sonnet. Headline scores can misrepresent capability when runs are incomplete.
+          </div>
+        </div>
+        <div class="finding-card">
+          <div class="finding-card__num">Finding 02</div>
           <div class="finding-card__title">Three-Tier Performance Pattern</div>
           <div class="finding-card__body">
             Frontier reasoning models (o3, Claude Sonnet 4.6) score ~91%, strong reasoning (Gemini 2.5 Pro) at 85%, and general-purpose models (GPT-4o, Mistral) at 46&ndash;54%. The gap between tiers is consistent across dimensions.
           </div>
         </div>
         <div class="finding-card">
-          <div class="finding-card__num">Finding 02</div>
+          <div class="finding-card__num">Finding 03</div>
           <div class="finding-card__title">Second-Order Thinking Is the Hardest Skill</div>
           <div class="finding-card__body">
             <code style="font-family: var(--font-mono); color: var(--accent); font-size: 0.8rem;">second_order_awareness</code> is the lowest-scoring dimension for every model tested. Anticipating downstream consequences of IR decisions &mdash; evidence destruction, stakeholder cascades, regulatory triggers &mdash; remains challenging even for frontier models.
           </div>
         </div>
         <div class="finding-card">
-          <div class="finding-card__num">Finding 03</div>
+          <div class="finding-card__num">Finding 04</div>
           <div class="finding-card__title">Reasoning Quality, Not Knowledge, Separates Models</div>
           <div class="finding-card__body">
             All five models demonstrate awareness of the real incidents. The difference lies in how they reason through competing tradeoffs and structure their recommendations. GPT-4o knows the same facts as o3 but scores 38 points lower because it fails to articulate tradeoffs and conditional logic.
           </div>
         </div>
         <div class="finding-card">
-          <div class="finding-card__num">Finding 04</div>
+          <div class="finding-card__num">Finding 05</div>
           <div class="finding-card__title">Architecture, Not Infrastructure</div>
           <div class="finding-card__body">
             o3 and GPT-4o both run on Azure OpenAI. The 38-point gap between them confirms the performance difference is model architecture (reasoning-class vs. general-purpose), not platform latency, content filtering, or deployment differences.
@@ -729,15 +775,14 @@
   <div class="container">
     <section class="section" id="limitations">
       <p class="section__label">Transparency</p>
-      <h2 class="section__title">Limitations &amp; What's Next</h2>
+      <h2 class="section__title">Limitations</h2>
       <div class="limitations">
         <ul>
-          <li><strong>Preliminary release:</strong> This page publishes initial findings from the first full benchmark run. Results may shift as more models, scenarios, and judge validation are added.</li>
-          <li><strong>Dataset size:</strong> 42 scenarios show clear tier separation, but are not statistically powered for fine-grained claims (e.g., 91.5% vs 91.4%).</li>
+          <li><strong>Claude Fable partial run:</strong> Only 21/42 scenarios completed; remaining failures were API billing errors, not model refusals. Full-run score (45.5%) is not comparable to completed-run score (91.8%).</li>
+          <li><strong>Dataset size:</strong> 42 scenarios show clear tier separation for complete runs, but are not statistically powered for fine-grained claims.</li>
           <li><strong>LLM-as-judge:</strong> Automated scoring has known biases. Mitigated by rubric-based pointwise scoring and dual-judge validation (GPT-5 on 18 scenarios produced identical ranking).</li>
-          <li><strong>Judge-model overlap:</strong> Gemini 2.5 Flash (judge) is in the same model family as Gemini 2.5 Pro (tested). Disclosed; rubric anchors scoring to criteria, not model preference.</li>
+          <li><strong>Judge-model overlap:</strong> Gemini 2.5 Flash (judge) is in the same model family as Gemini 2.5 Pro (tested). Disclosed; rubric anchors scoring to criteria.</li>
           <li><strong>Retrospective scenarios:</strong> All scenarios are based on past incidents. Real IR involves live, evolving information not captured here.</li>
-          <li><strong>In progress:</strong> Judge consistency testing, mid-tier models (GPT-4.1, o4-mini), open-source harness release, and dataset expansion.</li>
         </ul>
       </div>
     </section>
@@ -887,6 +932,62 @@
             ticks: {
               color: chartColors.tick,
               font: { family: "'Inter', sans-serif", size: 12 }
+            },
+            grid: { display: false }
+          }
+        }
+      }
+    });
+
+    // Claude Fable partial run chart
+    new Chart(document.getElementById('fableChart'), {
+      type: 'bar',
+      data: {
+        labels: [
+          'Fable (all 42)',
+          'Fable (21 completed)',
+          'Claude Sonnet 4.6',
+          'o3'
+        ],
+        datasets: [{
+          label: 'Overall Score',
+          data: [45.5, 91.8, 91.4, 91.5],
+          backgroundColor: [
+            'rgba(239, 68, 68, 0.7)',
+            'rgba(34, 197, 94, 0.85)',
+            'rgba(124, 156, 245, 0.5)',
+            'rgba(124, 156, 245, 0.5)'
+          ],
+          borderRadius: 6,
+          maxBarThickness: 70
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: ctx => ctx.parsed.y.toFixed(1) + '%'
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100,
+            ticks: {
+              color: chartColors.tick,
+              callback: v => v + '%',
+              font: { family: "'Inter', sans-serif", size: 12 }
+            },
+            grid: { color: chartColors.grid }
+          },
+          x: {
+            ticks: {
+              color: chartColors.tick,
+              font: { family: "'Inter', sans-serif", size: 11 }
             },
             grid: { display: false }
           }
