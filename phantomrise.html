@@ -692,7 +692,7 @@
       <span class="pl pl-P">P</span><span class="pl pl-H">H</span><span class="pl pl-A">A</span><span class="pl pl-N">N</span><span class="pl pl-T">T</span><span class="pl pl-O">O</span><span class="pl pl-M">M</span><span class="pl pl-R">R</span><span class="pl pl-I">I</span><span class="pl pl-S">S</span><span class="pl pl-E">E</span>
     </span>
   </h1>
-  <div class="subtitle">An AI-native security framework with 11 categories — threats, failure modes, and conditions STRIDE wasn't built for. Mapped to OWASP LLM Top 10 (2025) and OWASP Agentic Top 10 (2026).</div>
+  <div class="subtitle">An AI-native security framework with 11 categories — threats, failure modes, and conditions STRIDE wasn't built for. Mapped to OWASP LLM Top 10 (2026) and OWASP Agentic Top 10 (2026).</div>
 </header>
 
 <div class="stats-bar">
@@ -770,7 +770,7 @@
     </button>
     <button class="letter-btn" onclick="scrollTo('E', this)">
       <div class="letter-icon" style="background:rgba(236,204,104,0.12); color:var(--E)">E</div>
-      <div class="letter-name"><strong>Exposure & Output</strong>PII, system prompt leak</div>
+      <div class="letter-name"><strong>Exposure & Output</strong>PII, hidden context, output piping</div>
     </button>
   </div>
 
@@ -803,18 +803,23 @@
             </div>
             <div class="threat-row">
               <div><div class="threat-name">Training Data Poisoning</div><div class="threat-detail">Corrupting model weights via backdoored training data</div></div>
-              <div class="owasp-badges"><span class="owasp-badge llm04">LLM04</span><span class="owasp-badge asi05">ASI05</span></div>
+              <div class="owasp-badges"><span class="owasp-badge llm05">LLM05</span><span class="owasp-badge asi05">ASI05</span></div>
               <div class="threat-detail">Core OWASP coverage; backdoor insertion at training time</div>
             </div>
             <div class="threat-row">
-              <div><div class="threat-name">RAG / Memory Poisoning</div><div class="threat-detail">Injecting malicious content into retrieval stores or agent memory</div></div>
-              <div class="owasp-badges"><span class="owasp-badge llm08">LLM08</span><span class="owasp-badge asi05">ASI05</span></div>
+              <div><div class="threat-name">RAG / Memory Poisoning</div><div class="threat-detail">Injecting malicious content into retrieval stores, feedback loops, or agent memory</div></div>
+              <div class="owasp-badges"><span class="owasp-badge llm05">LLM05</span><span class="owasp-badge asi05">ASI05</span></div>
               <div class="threat-detail">Runtime memory manipulation persists across agent sessions</div>
             </div>
             <div class="threat-row">
               <div><div class="threat-name">Eval Set Poisoning</div><div class="threat-detail">Corrupting evaluation data to hide malicious model behavior during testing</div></div>
-              <div class="owasp-badges"><span class="owasp-badge llm04">LLM04</span></div>
+              <div class="owasp-badges"><span class="owasp-badge llm05">LLM05</span></div>
               <div class="threat-detail">Not explicitly named in any OWASP list — PHANTOMRISE original</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">Embedding &amp; Index Manipulation</div><div class="threat-detail">Weaknesses in embeddings, similarity search, or indexing that expose or manipulate retrieved content</div></div>
+              <div class="owasp-badges"><span class="owasp-badge llm09">LLM09</span></div>
+              <div class="threat-detail">Vector-layer attack surface distinct from content poisoning</div>
             </div>
           </div>
         </div>
@@ -843,7 +848,7 @@
             </div>
             <div class="threat-row">
               <div><div class="threat-name">Misinformation / Hallucination</div><div class="threat-detail">Confidently false outputs causing harmful downstream decisions</div></div>
-              <div class="owasp-badges"><span class="owasp-badge llm09">LLM09</span></div>
+              <div class="owasp-badges"><span class="owasp-badge llm07">LLM07</span></div>
               <div class="threat-detail">Primary OWASP coverage</div>
             </div>
             <div class="threat-row">
@@ -878,7 +883,7 @@
             </div>
             <div class="threat-row">
               <div><div class="threat-name">Excessive Agency</div><div class="threat-detail">Agent acts beyond intended scope without human oversight</div></div>
-              <div class="owasp-badges"><span class="owasp-badge llm06">LLM06</span><span class="owasp-badge asi08">ASI08</span></div>
+              <div class="owasp-badges"><span class="owasp-badge llm03">LLM03</span><span class="owasp-badge asi08">ASI08</span></div>
               <div class="threat-detail">Core OWASP coverage for both lists</div>
             </div>
             <div class="threat-row">
@@ -956,12 +961,12 @@
             </div>
             <div class="threat-row">
               <div><div class="threat-name">Compromised Base Model</div><div class="threat-detail">Backdoored weights from malicious model provider or fine-tuning pipeline</div></div>
-              <div class="owasp-badges"><span class="owasp-badge llm03">LLM03</span><span class="owasp-badge asi04">ASI04</span></div>
+              <div class="owasp-badges"><span class="owasp-badge llm04">LLM04</span><span class="owasp-badge asi04">ASI04</span></div>
               <div class="threat-detail">Supply chain entry point at the foundation layer</div>
             </div>
             <div class="threat-row">
               <div><div class="threat-name">Malicious MCP Server / Plugin</div><div class="threat-detail">Compromised tool server or plugin injecting malicious behavior into agent workflows</div></div>
-              <div class="owasp-badges"><span class="owasp-badge asi04">ASI04</span><span class="owasp-badge llm03">LLM03</span></div>
+              <div class="owasp-badges"><span class="owasp-badge asi04">ASI04</span><span class="owasp-badge llm04">LLM04</span></div>
               <div class="threat-detail">Marketplace agent risk: not explicitly named in ASI04</div>
             </div>
           </div>
@@ -1069,12 +1074,12 @@
             </div>
             <div class="threat-row">
               <div><div class="threat-name">Denial of Wallet</div><div class="threat-detail">API cost exploitation as a financial attack — triggering massive inference spend</div></div>
-              <div class="owasp-badges"><span class="owasp-badge llm10">LLM10</span></div>
+              <div class="owasp-badges"><span class="owasp-badge llm06">LLM06</span></div>
               <div class="threat-detail">AI-specific financial DoS; no STRIDE equivalent</div>
             </div>
             <div class="threat-row">
               <div><div class="threat-name">Multi-Agent Amplification Loops</div><div class="threat-detail">Recursive tool calls between agents multiply resource consumption beyond rate limits</div></div>
-              <div class="owasp-badges"><span class="owasp-badge llm10">LLM10</span><span class="owasp-badge asi10">ASI10</span></div>
+              <div class="owasp-badges"><span class="owasp-badge llm06">LLM06</span><span class="owasp-badge asi10">ASI10</span></div>
               <div class="threat-detail">Bypasses single-agent rate limiting controls</div>
             </div>
           </div>
@@ -1112,6 +1117,11 @@
               <div class="owasp-badges"><span class="owasp-badge asi03">ASI03</span><span class="owasp-badge asi07">ASI07</span></div>
               <div class="threat-detail">Each delegation individually authorized; invisible to STRIDE</div>
             </div>
+            <div class="threat-row">
+              <div><div class="threat-name">Hidden Permissions &amp; Token Exposure</div><div class="threat-detail">Tool schemas, permissions, or tokens inferred or extracted through adversarial interaction</div></div>
+              <div class="owasp-badges"><span class="owasp-badge llm08">LLM08</span></div>
+              <div class="threat-detail">Identity-layer exposure under hidden context extraction</div>
+            </div>
           </div>
         </div>
       </div>
@@ -1131,7 +1141,7 @@
         </div>
         <div class="cat-body">
           <div class="cat-description">
-            <em>Memory bleed</em> — one session's content leaking into another — and <em>cross-tenant inference</em> — one customer's data influencing another customer's LLM responses in a multi-tenant SaaS — are named by neither OWASP list. STRIDE would flag a shared database; it has no model for inference-layer contamination. These are PHANTOMRISE originals.
+            <em>Memory bleed</em> — one session's content leaking into another — and <em>cross-tenant inference</em> — one customer's data influencing another customer's LLM responses in a multi-tenant SaaS — sit at the boundary of isolation failures. OWASP LLM09 now names retrieval authorization and isolation weaknesses explicitly; PHANTOMRISE captures the inference-layer contamination STRIDE cannot model.
           </div>
           <div class="threats-section">
             <div class="threats-title">Threat Mappings</div>
@@ -1147,8 +1157,13 @@
             </div>
             <div class="threat-row">
               <div><div class="threat-name">Cross-Tenant Inference</div><div class="threat-detail">One customer's data influences another customer's LLM responses in multi-tenant SaaS</div></div>
-              <div class="owasp-badges"><span class="novel-tag">★ Novel</span></div>
-              <div class="threat-detail">Inference-layer contamination; STRIDE cannot model this</div>
+              <div class="owasp-badges"><span class="owasp-badge llm02">LLM02</span><span class="owasp-badge llm09">LLM09</span></div>
+              <div class="threat-detail">Inference-layer contamination and side-channel disclosure</div>
+            </div>
+            <div class="threat-row">
+              <div><div class="threat-name">Retrieval Authorization &amp; Isolation Failures</div><div class="threat-detail">Weak retrieval authorization, shared indexes, or poor tenant isolation in vector stores</div></div>
+              <div class="owasp-badges"><span class="owasp-badge llm09">LLM09</span></div>
+              <div class="threat-detail">Primary OWASP coverage for vector-layer isolation gaps</div>
             </div>
             <div class="threat-row">
               <div><div class="threat-name">Context Window Pollution</div><div class="threat-detail">Adversarial content injected into shared context affecting all downstream processing</div></div>
@@ -1165,13 +1180,13 @@
           <div class="cat-letter" style="background:rgba(236,204,104,0.12); color:var(--E)">E</div>
           <div class="cat-info">
             <div class="cat-name" style="color:var(--E)">Exposure & Output Handling</div>
-            <div class="cat-tagline">PII leakage, system prompt extraction, unsafe output piping</div>
+            <div class="cat-tagline">PII leakage, hidden context exposure, unsafe output piping</div>
           </div>
           <div class="cat-meta"><span class="chevron">▾</span></div>
         </div>
         <div class="cat-body">
           <div class="cat-description">
-            E consolidates three OWASP output-side risks into one practitioner prompt: <em>what is this system putting out, and where is it going?</em> Exfiltration via tool invocation — a manipulated agent using a legitimate tool call to leak data — sits at the intersection of E and M and represents one of the most concrete AI attack chains in practice.
+            E consolidates output-side risks into one practitioner prompt: <em>what is this system putting out, and where is it going?</em> Exfiltration via tool invocation — a manipulated agent using a legitimate tool call to leak data — sits at the intersection of E and M and represents one of the most concrete AI attack chains in practice.
           </div>
           <div class="threats-section">
             <div class="threats-title">Threat Mappings</div>
@@ -1181,18 +1196,18 @@
               <div class="grid-col-title">Notes</div>
             </div>
             <div class="threat-row">
-              <div><div class="threat-name">PII / Sensitive Data Leakage</div><div class="threat-detail">Model outputs containing personal data, credentials, or confidential content</div></div>
+              <div><div class="threat-name">PII / Sensitive Data Leakage</div><div class="threat-detail">Confidential data leaks through responses, retrieved chunks, tool arguments, logs, or telemetry</div></div>
               <div class="owasp-badges"><span class="owasp-badge llm02">LLM02</span></div>
               <div class="threat-detail">Core OWASP coverage</div>
             </div>
             <div class="threat-row">
-              <div><div class="threat-name">System Prompt Extraction</div><div class="threat-detail">Adversarial prompts revealing confidential system instructions</div></div>
-              <div class="owasp-badges"><span class="owasp-badge llm07">LLM07</span></div>
-              <div class="threat-detail">Reveals security controls and proprietary instructions</div>
+              <div><div class="threat-name">Hidden Context Exposure</div><div class="threat-detail">System prompts, internal rules, workflow logic, tool schemas, or tokens extracted or inferred</div></div>
+              <div class="owasp-badges"><span class="owasp-badge llm08">LLM08</span></div>
+              <div class="threat-detail">Broader than system prompt leakage — covers all non-user-facing context</div>
             </div>
             <div class="threat-row">
-              <div><div class="threat-name">Unsafe Output Piping</div><div class="threat-detail">Unvalidated LLM output passed to downstream systems (shells, DBs, browsers)</div></div>
-              <div class="owasp-badges"><span class="owasp-badge llm05">LLM05</span></div>
+              <div><div class="threat-name">Unsafe Output Piping</div><div class="threat-detail">Unvalidated LLM output passed to downstream systems (shells, DBs, browsers, APIs)</div></div>
+              <div class="owasp-badges"><span class="owasp-badge llm10">LLM10</span></div>
               <div class="threat-detail">Output as attack vector for downstream injection</div>
             </div>
           </div>
@@ -1229,18 +1244,18 @@
   <div class="legend-title">Framework Reference</div>
   <div class="legend-cols">
     <div>
-      <div class="legend-section-title">OWASP LLM Top 10 (2025)</div>
+      <div class="legend-section-title">OWASP LLM Top 10 (2026)</div>
       <div class="legend-grid">
         <div class="legend-item"><span class="owasp-badge llm01">LLM01</span> Prompt Injection</div>
-        <div class="legend-item"><span class="owasp-badge llm02">LLM02</span> Sensitive Info Disclosure</div>
-        <div class="legend-item"><span class="owasp-badge llm03">LLM03</span> Supply Chain</div>
-        <div class="legend-item"><span class="owasp-badge llm04">LLM04</span> Data & Model Poisoning</div>
-        <div class="legend-item"><span class="owasp-badge llm05">LLM05</span> Improper Output Handling</div>
-        <div class="legend-item"><span class="owasp-badge llm06">LLM06</span> Excessive Agency</div>
-        <div class="legend-item"><span class="owasp-badge llm07">LLM07</span> System Prompt Leakage</div>
-        <div class="legend-item"><span class="owasp-badge llm08">LLM08</span> Vector & Embedding Weaknesses</div>
-        <div class="legend-item"><span class="owasp-badge llm09">LLM09</span> Misinformation</div>
-        <div class="legend-item"><span class="owasp-badge llm10">LLM10</span> Unbounded Consumption</div>
+        <div class="legend-item"><span class="owasp-badge llm02">LLM02</span> Sensitive Information Disclosure</div>
+        <div class="legend-item"><span class="owasp-badge llm03">LLM03</span> Excessive Agency</div>
+        <div class="legend-item"><span class="owasp-badge llm04">LLM04</span> Supply Chain</div>
+        <div class="legend-item"><span class="owasp-badge llm05">LLM05</span> Data and Model Poisoning</div>
+        <div class="legend-item"><span class="owasp-badge llm06">LLM06</span> Unbounded Consumption</div>
+        <div class="legend-item"><span class="owasp-badge llm07">LLM07</span> Misinformation</div>
+        <div class="legend-item"><span class="owasp-badge llm08">LLM08</span> Hidden Context Exposure</div>
+        <div class="legend-item"><span class="owasp-badge llm09">LLM09</span> Vector and Embedding Weaknesses</div>
+        <div class="legend-item"><span class="owasp-badge llm10">LLM10</span> Improper Output Handling</div>
       </div>
     </div>
     <div>
@@ -1284,15 +1299,15 @@
   // OWASP → PHANTOMRISE mapping
   const owaspMap = {
     LLM01: {letters:['M'], label:'Prompt Injection'},
-    LLM02: {letters:['E','S'], label:'Sensitive Info Disclosure'},
-    LLM03: {letters:['T'], label:'Supply Chain'},
-    LLM04: {letters:['P'], label:'Data & Model Poisoning'},
-    LLM05: {letters:['E'], label:'Improper Output Handling'},
-    LLM06: {letters:['A'], label:'Excessive Agency'},
-    LLM07: {letters:['M','E'], label:'System Prompt Leakage'},
-    LLM08: {letters:['P'], label:'Vector & Embedding Weaknesses'},
-    LLM09: {letters:['H'], label:'Misinformation'},
-    LLM10: {letters:['R'], label:'Unbounded Consumption'},
+    LLM02: {letters:['E','S'], label:'Sensitive Information Disclosure'},
+    LLM03: {letters:['A'], label:'Excessive Agency'},
+    LLM04: {letters:['T'], label:'Supply Chain'},
+    LLM05: {letters:['P'], label:'Data and Model Poisoning'},
+    LLM06: {letters:['R'], label:'Unbounded Consumption'},
+    LLM07: {letters:['H'], label:'Misinformation'},
+    LLM08: {letters:['E','M','I'], label:'Hidden Context Exposure'},
+    LLM09: {letters:['P','S'], label:'Vector and Embedding Weaknesses'},
+    LLM10: {letters:['E'], label:'Improper Output Handling'},
     ASI01: {letters:['M'], label:'Agent Goal Hijack'},
     ASI02: {letters:['A'], label:'Tool Misuse & Exploitation'},
     ASI03: {letters:['I'], label:'Identity & Privilege Abuse'},
@@ -1313,7 +1328,7 @@
     // Header row 1 — section labels
     let thead = '<thead>';
     thead += '<tr><th></th>';
-    thead += '<th colspan="10" style="text-align:center; color:#74c0fc; border-bottom:1px solid rgba(112,161,255,0.2)">OWASP LLM Top 10 (2025)</th>';
+    thead += '<th colspan="10" style="text-align:center; color:#74c0fc; border-bottom:1px solid rgba(112,161,255,0.2)">OWASP LLM Top 10 (2026)</th>';
     thead += '<th colspan="10" style="text-align:center; color:#f472b6; border-bottom:1px solid rgba(244,114,182,0.2)">OWASP Agentic Top 10 (2026)</th>';
     thead += '</tr>';
 
@@ -1442,8 +1457,8 @@
       novel: false,
       items: [
         { title: 'Input Sanitization & Prompt Injection Detection', detail: 'Scan inputs for known injection patterns. Treat all user-supplied content as untrusted, including content retrieved via RAG or passed from other agents.' },
-        { title: 'System Prompt Hardening', detail: 'Separate system prompt from user input at the architecture level. Never concatenate them in ways that allow user input to override system instructions.' },
-        { title: 'Output Filtering for Instruction Leakage', detail: 'Filter outputs for system prompt content before returning to users. Monitor for prompt extraction attempts.' },
+        { title: 'Hidden Context Hardening', detail: 'Separate system prompts, tool schemas, and internal rules from user input at the architecture level. Never concatenate them in ways that allow user input to override system instructions.' },
+        { title: 'Output Filtering for Instruction Leakage', detail: 'Filter outputs for hidden context content before returning to users. Monitor for extraction attempts against system prompts, tool schemas, and permissions.' },
         { title: 'Intent Monitoring Across Long Sessions', detail: 'Track agent goal state across a session. Alert when stated objectives drift from the original task — a potential indicator of intent drift attacks.' }
       ]
     },
@@ -1482,7 +1497,7 @@
       novel: false,
       items: [
         { title: 'Output Filtering for PII & Sensitive Data', detail: 'Scan all LLM outputs before returning to users or piping to downstream systems. Detect and redact PII, credentials, and confidential content.' },
-        { title: 'System Prompt Access Controls', detail: 'Treat system prompts as confidential configuration. Restrict access, version-control them, and monitor outputs for prompt extraction attempts.' },
+        { title: 'Hidden Context Access Controls', detail: 'Treat system prompts, tool schemas, and internal rules as confidential configuration. Restrict access, version-control them, and monitor outputs for hidden context extraction attempts.' },
         { title: 'Sandboxed Output Processing', detail: 'Never pipe raw LLM output directly to shells, databases, or browsers. Process and validate output in a sandboxed environment before downstream use.' },
         { title: 'Data Loss Prevention (DLP) on Outputs', detail: 'Apply DLP policies to model outputs, especially in enterprise deployments. Flag outputs containing classification markers, internal references, or known sensitive patterns.' }
       ]
